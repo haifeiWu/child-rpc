@@ -12,6 +12,8 @@
     <modules>
         <module>child-rpc-core</module>
         <module>child-rpc-common</module>
+        <module>child-rpc-demo</module>
+        <module>bom</module>
     </modules>
 
 
