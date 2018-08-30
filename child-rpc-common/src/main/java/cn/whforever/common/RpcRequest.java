@@ -1,4 +1,7 @@
 package cn.whforever.common;
 
-public class RpcRequest {
+import java.io.Serializable;
+
+public class RpcRequest implements Serializable {
+    private static final long serialVersionUID = -4364536436151723421L;
 }
