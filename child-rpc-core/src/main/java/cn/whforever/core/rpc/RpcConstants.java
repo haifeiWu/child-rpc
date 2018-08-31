@@ -1,4 +1,4 @@
-package cn.whforever.common;
+package cn.whforever.core.rpc;
 
 /**
  * RPC常量类

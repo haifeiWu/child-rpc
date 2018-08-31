@@ -11,5 +11,17 @@
 
     <artifactId>child-rpc-core</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <!--<version>1.7.24</version>-->
+        </dependency>
+    </dependencies>
 
 </project>
