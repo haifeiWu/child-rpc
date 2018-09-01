@@ -9,7 +9,7 @@ import java.util.Map;
  * @Date 2018/9/1 18:10
  **/
 public class RpcInvokerHandler {
-    private static Map<String, Object> serviceMap = new HashMap<String, Object>();
+    public static Map<String, Object> serviceMap = new HashMap<String, Object>();
     public static RpcResponse invokeService(RpcRequest request) {
 //        if (serviceBean==null) {
 //            serviceBean = serviceMap.get(request.getClassName());

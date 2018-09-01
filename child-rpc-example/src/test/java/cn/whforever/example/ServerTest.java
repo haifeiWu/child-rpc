@@ -17,6 +17,9 @@ public class ServerTest {
         ServerProxy serverProxy = new ServerProxy(new NettyServer(),serverConfig);
         try {
             serverProxy.export();
+            while (true){
+
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

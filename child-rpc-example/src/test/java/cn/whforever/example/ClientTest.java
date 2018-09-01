@@ -19,7 +19,8 @@ public class ClientTest {
                 .setPort(5201)
                 .setTimeoutMillis(100000)
                 .setSerializer(Serializer.SerializeEnum.JSON.serializer);
-        ClientProxy clientProxy = new ClientProxy(clientConfig,new NettyClient(),HelloServiceImpl.class);
+        ClientProxy clientProxy = new ClientProxy(clientConfig,new NettyClient(),HelloService.class);
         HelloService helloService = (HelloService) clientProxy.refer();
+        System.out.println(helloService.sayHi());
     }
 }
