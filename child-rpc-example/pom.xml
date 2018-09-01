@@ -9,7 +9,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>child-rpc-demo</artifactId>
-
+    <artifactId>child-rpc-example</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>cn.whforever</groupId>
+            <artifactId>child-rpc-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 </project>

@@ -1,6 +1,8 @@
 package cn.whforever.core.protocol.netty.server;
 
+import cn.whforever.core.rpc.RpcInvokerHandler;
 import cn.whforever.core.rpc.RpcRequest;
+import cn.whforever.core.rpc.RpcResponse;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
@@ -12,7 +14,9 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> 
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcRequest rpcRequest) throws Exception {
-
+        // invoke
+        RpcResponse response = RpcInvokerHandler.invokeService(rpcRequest);
+        channelHandlerContext.writeAndFlush(response);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package cn.whforever.core.protocol.netty.client;
 
+import cn.whforever.core.rpc.RpcCallbackFuture;
 import cn.whforever.core.rpc.RpcResponse;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -11,7 +12,9 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<RpcResponse>
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcResponse rpcResponse) throws Exception {
-
+        RpcCallbackFuture future = RpcCallbackFuture.futurePool.get(rpcResponse.getRequestId());
+        future.setResponse(rpcResponse);
+        RpcCallbackFuture.futurePool.put(rpcResponse.getRequestId(), future);
     }
 
     @Override

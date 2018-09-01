@@ -6,6 +6,8 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeoutException;
 
 /**
+ * netty的连接超时操作.
+ *
  * @author wuhf
  * @Date 2018/8/31 19:06
  **/
