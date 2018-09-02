@@ -10,25 +10,25 @@ import java.util.Map;
  **/
 public class RpcInvokerHandler {
     public static Map<String, Object> serviceMap = new HashMap<String, Object>();
-    public static RpcResponse invokeService(RpcRequest request) {
-//        if (serviceBean==null) {
-//            serviceBean = serviceMap.get(request.getClassName());
-//        }
-//        if (serviceBean == null) {
-//            // TODO
-//        }
+    public static RpcResponse invokeService(RpcRequest request) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+//        Object serviceBean = serviceMap.get(request.getClassName());
+
+        String serviceBeanName = (String) serviceMap.get(request.getClassName());
+        Object serviceBean = Class.forName(serviceBeanName).newInstance();
 
         RpcResponse response = new RpcResponse();
         response.setRequestId(request.getRequestId());
         try {
-            Class<?> serviceClass = Class.forName(request.getClassName());
+
+            Class<?> serviceClass = serviceBean.getClass();
             String methodName = request.getMethodName();
             Class<?>[] parameterTypes = request.getParameterTypes();
             Object[] parameters = request.getParameters();
 
             Method method = serviceClass.getMethod(methodName, parameterTypes);
             method.setAccessible(true);
-            Object result = method.invoke(serviceClass.newInstance(), parameters);
+            Object result = method.invoke(serviceBean, parameters);
+
             response.setResult(result);
         } catch (Throwable t) {
             t.printStackTrace();

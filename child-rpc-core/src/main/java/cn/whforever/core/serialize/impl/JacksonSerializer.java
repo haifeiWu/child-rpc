@@ -1,8 +1,9 @@
 package cn.whforever.core.serialize.impl;
 
 import cn.whforever.core.serialize.Serializer;
-import org.codehaus.jackson.map.ObjectMapper;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
 public class JacksonSerializer extends Serializer {
@@ -20,6 +21,7 @@ public class JacksonSerializer extends Serializer {
     @Override
     public <T> Object deserialize(byte[] bytes, Class<T> clazz) {
         try {
+            objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true) ;
             return objectMapper.readValue(bytes,clazz);
         } catch (IOException e) {
             throw new IllegalStateException(e.getMessage(), e);

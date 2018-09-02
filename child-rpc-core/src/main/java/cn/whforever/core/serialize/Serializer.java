@@ -1,5 +1,6 @@
 package cn.whforever.core.serialize;
 
+import cn.whforever.core.serialize.impl.HessianSerializer;
 import cn.whforever.core.serialize.impl.JacksonSerializer;
 
 /**
@@ -11,7 +12,7 @@ public abstract class Serializer {
     public abstract <T> Object deserialize(byte[] bytes, Class<T> clazz);
 
     public enum SerializeEnum {
-//        HESSIAN(new HessianSerializer()),
+        HESSIAN(new HessianSerializer()),
 //        PROTOSTUFF(new ProtostuffSerializer()),
         JSON(new JacksonSerializer());
 //

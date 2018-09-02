@@ -18,9 +18,11 @@ public class ClientTest {
         clientConfig.setHost("127.0.0.1")
                 .setPort(5201)
                 .setTimeoutMillis(100000)
-                .setSerializer(Serializer.SerializeEnum.JSON.serializer);
+                .setSerializer(Serializer.SerializeEnum.HESSIAN.serializer);
         ClientProxy clientProxy = new ClientProxy(clientConfig,new NettyClient(),HelloService.class);
-        HelloService helloService = (HelloService) clientProxy.refer();
-        System.out.println(helloService.sayHi());
+        for (int i = 0; i < 10; i++) {
+            HelloService helloService = (HelloService) clientProxy.refer();
+            System.out.println(helloService.sayHi());
+        }
     }
 }

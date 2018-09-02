@@ -56,7 +56,7 @@ public class NettyServer extends ChildServer {
                 }
             }
         });
-        thread.setDaemon(true);
+//        thread.setDaemon(true);
         thread.start();
     }
 

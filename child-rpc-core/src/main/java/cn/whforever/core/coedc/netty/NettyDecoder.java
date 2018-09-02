@@ -34,8 +34,13 @@ public class NettyDecoder extends ByteToMessageDecoder {
             return;
         }
 
-        byte[] data = new byte[dataLength];
-        Object object = serializer.deserialize(data,genericClass);
-        list.add(object);
+        try {
+            byte[] data = new byte[dataLength];
+            byteBuf.readBytes(data);
+            Object object = serializer.deserialize(data,genericClass);
+            list.add(object);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
