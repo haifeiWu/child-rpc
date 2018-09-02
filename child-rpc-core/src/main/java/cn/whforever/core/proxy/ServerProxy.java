@@ -28,7 +28,8 @@ public class ServerProxy {
     public void export() {
         try {
             ServerConfig serverConfig = (ServerConfig) this.config;
-            RpcInvokerHandler.serviceMap.put((String) serverConfig.getInterfaceId(),serverConfig.getRef());
+            Object serviceBean = Class.forName((String) serverConfig.getRef()).newInstance();
+            RpcInvokerHandler.serviceMap.put((String) serverConfig.getInterfaceId(),serviceBean);
             this.childServer.start(this.config);
         } catch (Exception e) {
             e.printStackTrace();
