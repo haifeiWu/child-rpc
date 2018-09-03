@@ -13,9 +13,6 @@ public class RpcInvokerHandler {
     public static RpcResponse invokeService(RpcRequest request) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         Object serviceBean = serviceMap.get(request.getClassName());
 
-//        String serviceBeanName = (String) serviceMap.get(request.getClassName());
-//        Object serviceBean = Class.forName(serviceBeanName).newInstance();
-
         RpcResponse response = new RpcResponse();
         response.setRequestId(request.getRequestId());
         try {

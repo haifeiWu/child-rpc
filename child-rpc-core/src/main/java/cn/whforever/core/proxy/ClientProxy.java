@@ -55,8 +55,7 @@ public class ClientProxy implements Proxy {
 
                         // valid response
                         if (response == null) {
-//                            logger.error(">>>>>>>>>>> xxl-rpc netty response not found.");
-                            throw new Exception(">>>>>>>>>>> xxl-rpc netty response not found.");
+                            throw new Exception(">>>>>>>>>>> child-rpc netty response not found.");
                         }
                         if (null != response.getError()) {
                             throw response.getError();
