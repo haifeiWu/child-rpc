@@ -8,6 +8,12 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * server端业务逻辑处理.
+ *
+ * @author wuhf
+ * @data 2018/07/09/03
+ */
 public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyServerHandler.class);
