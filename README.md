@@ -1,3 +1,5 @@
+> 原文地址： [haifeiWu和他朋友们的博客](https://www.hchstudio.cn/article/2018/b674/?_ref=github) <br/>博客地址：[www.hchstudio.cn](https://www.hchstudio.cn/article/2018/b674/?_ref=github) <br/>欢迎转载，转载请注明作者及出处，谢谢！
+
 服务端开发都会或多或少的涉及到 RPC 的使用，当然如果止步于会用，对自己的成长很是不利，所以楼主今天本着知其然，且知其所以然的精神来探讨一下 RPC 这个东西。
 <!--more-->
 ## child-rpc模型
