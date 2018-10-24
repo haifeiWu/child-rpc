@@ -1,6 +1,6 @@
 package cn.whforever.core.config;
 
-import cn.whforever.core.serialize.Serializer;
+import cn.whforever.core.serialize.AbstractSerializer;
 
 /**
  * @author wuhf
@@ -9,7 +9,7 @@ import cn.whforever.core.serialize.Serializer;
 public class ServerConfig implements Config {
 
     private int port;
-    private Serializer serializer;
+    private AbstractSerializer serializer;
     /**
      * 接口实现类引用
      */
@@ -26,11 +26,11 @@ public class ServerConfig implements Config {
         return this;
     }
 
-    public Serializer getSerializer() {
+    public AbstractSerializer getSerializer() {
         return serializer;
     }
 
-    public ServerConfig setSerializer(Serializer serializer) {
+    public ServerConfig setSerializer(AbstractSerializer serializer) {
         this.serializer = serializer;
         return this;
     }

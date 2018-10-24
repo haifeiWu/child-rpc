@@ -2,14 +2,8 @@ package cn.whforever.core.proxy;
 
 import cn.whforever.core.config.Config;
 import cn.whforever.core.config.ServerConfig;
-import cn.whforever.core.remote.server.ChildServer;
+import cn.whforever.core.remote.server.AbstractChildServer;
 import cn.whforever.core.rpc.RpcInvokerHandler;
-import cn.whforever.core.rpc.RpcRequest;
-import cn.whforever.core.rpc.RpcResponse;
-
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author wuhf
@@ -17,10 +11,10 @@ import java.util.Map;
  **/
 public class ServerProxy {
 
-    private ChildServer childServer;
+    private AbstractChildServer childServer;
     private Config config;
 
-    public ServerProxy (ChildServer childServer,Config config) {
+    public ServerProxy (AbstractChildServer childServer, Config config) {
         this.childServer = childServer;
         this.config = config;
     }

@@ -1,6 +1,6 @@
 package cn.whforever.core.coedc.netty;
 
-import cn.whforever.core.serialize.Serializer;
+import cn.whforever.core.serialize.AbstractSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
@@ -12,9 +12,9 @@ import io.netty.handler.codec.MessageToByteEncoder;
 public class NettyEncoder extends MessageToByteEncoder<Object> {
 
     private Class<?> genericClass;
-    private Serializer serializer;
+    private AbstractSerializer serializer;
 
-    public NettyEncoder(Class<?> genericClass,Serializer serializer) {
+    public NettyEncoder(Class<?> genericClass,AbstractSerializer serializer) {
         this.serializer = serializer;
         this.genericClass = genericClass;
     }

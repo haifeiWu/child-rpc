@@ -3,9 +3,12 @@ package cn.whforever.core.remote.client;
 import cn.whforever.core.config.Config;
 import cn.whforever.core.rpc.RpcRequest;
 import cn.whforever.core.rpc.RpcResponse;
-import cn.whforever.core.serialize.Serializer;
 
-public abstract class ChildClient {
+/**
+ * @author wuhf
+ * @data 2018-10-24
+ */
+public abstract class AbstractChildClient {
     // ---------------------- config ----------------------
     protected Config config;
 

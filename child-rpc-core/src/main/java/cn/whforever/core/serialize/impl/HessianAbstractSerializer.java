@@ -1,6 +1,6 @@
 package cn.whforever.core.serialize.impl;
 
-import cn.whforever.core.serialize.Serializer;
+import cn.whforever.core.serialize.AbstractSerializer;
 import com.caucho.hessian.io.HessianInput;
 import com.caucho.hessian.io.HessianOutput;
 
@@ -12,7 +12,7 @@ import java.io.IOException;
  * hessian serialize
  * @author xuxueli 2015-9-26 02:53:29
  */
-public class HessianSerializer extends Serializer {
+public class HessianAbstractSerializer extends AbstractSerializer {
 
 	@Override
 	public <T> byte[] serialize(T obj){

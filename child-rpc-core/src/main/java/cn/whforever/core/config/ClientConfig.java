@@ -1,6 +1,6 @@
 package cn.whforever.core.config;
 
-import cn.whforever.core.serialize.Serializer;
+import cn.whforever.core.serialize.AbstractSerializer;
 
 /**
  * @author wuhf
@@ -11,7 +11,7 @@ public class ClientConfig implements Config {
     private String host;
     private int port;
     protected long timeoutMillis;
-    private Serializer serializer;
+    private AbstractSerializer serializer;
 
     public String getHost() {
         return host;
@@ -31,11 +31,11 @@ public class ClientConfig implements Config {
         return this;
     }
 
-    public Serializer getSerializer() {
+    public AbstractSerializer getSerializer() {
         return serializer;
     }
 
-    public ClientConfig setSerializer(Serializer serializer) {
+    public ClientConfig setSerializer(AbstractSerializer serializer) {
         this.serializer = serializer;
         return this;
     }

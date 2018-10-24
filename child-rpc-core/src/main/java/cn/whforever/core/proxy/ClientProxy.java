@@ -1,7 +1,7 @@
 package cn.whforever.core.proxy;
 
 import cn.whforever.core.config.Config;
-import cn.whforever.core.remote.client.ChildClient;
+import cn.whforever.core.remote.client.AbstractChildClient;
 import cn.whforever.core.rpc.RpcRequest;
 import cn.whforever.core.rpc.RpcResponse;
 
@@ -14,11 +14,11 @@ import java.util.UUID;
  * @Date 2018/9/1 17:04
  **/
 public class ClientProxy implements Proxy {
-    private ChildClient childClient;
+    private AbstractChildClient childClient;
     private Config config;
     private Class<?> iface;
 
-    public ClientProxy(Config config, ChildClient childClient, Class<?> iface) {
+    public ClientProxy(Config config, AbstractChildClient childClient, Class<?> iface) {
         this.childClient = childClient;
         this.config = config;
         this.iface = iface;

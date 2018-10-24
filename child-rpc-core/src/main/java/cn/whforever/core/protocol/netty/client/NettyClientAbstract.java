@@ -4,7 +4,7 @@ import cn.whforever.core.coedc.netty.NettyDecoder;
 import cn.whforever.core.coedc.netty.NettyEncoder;
 import cn.whforever.core.config.ClientConfig;
 import cn.whforever.core.config.Config;
-import cn.whforever.core.remote.client.ChildClient;
+import cn.whforever.core.remote.client.AbstractChildClient;
 import cn.whforever.core.rpc.RpcCallbackFuture;
 import cn.whforever.core.rpc.RpcRequest;
 import cn.whforever.core.rpc.RpcResponse;
@@ -17,7 +17,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-public class NettyClient extends ChildClient {
+public class NettyClientAbstract extends AbstractChildClient {
 
     private Channel channel;
 
@@ -43,7 +43,7 @@ public class NettyClient extends ChildClient {
     }
 
     private void initNettyClient() throws Exception {
-        ClientConfig clientConfig = (ClientConfig) this.config;
+        final ClientConfig clientConfig = (ClientConfig) this.config;
         EventLoopGroup group = new NioEventLoopGroup();
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(group).channel(NioSocketChannel.class)

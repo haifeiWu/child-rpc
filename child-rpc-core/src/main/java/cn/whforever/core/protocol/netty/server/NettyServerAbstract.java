@@ -4,7 +4,7 @@ import cn.whforever.core.coedc.netty.NettyDecoder;
 import cn.whforever.core.coedc.netty.NettyEncoder;
 import cn.whforever.core.config.Config;
 import cn.whforever.core.config.ServerConfig;
-import cn.whforever.core.remote.server.ChildServer;
+import cn.whforever.core.remote.server.AbstractChildServer;
 import cn.whforever.core.rpc.RpcRequest;
 import cn.whforever.core.rpc.RpcResponse;
 import io.netty.bootstrap.ServerBootstrap;
@@ -15,9 +15,9 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NettyServer extends ChildServer {
+public class NettyServerAbstract extends AbstractChildServer {
 
-    private static final Logger logger = LoggerFactory.getLogger(NettyServer.class);
+    private static final Logger logger = LoggerFactory.getLogger(NettyServerAbstract.class);
     private Thread thread;
 
     @Override
@@ -46,7 +46,7 @@ public class NettyServer extends ChildServer {
                             .option(ChannelOption.SO_REUSEADDR, true)
                             .childOption(ChannelOption.SO_KEEPALIVE, true);
                     ChannelFuture future = bootstrap.bind(serverConfig.getPort()).sync();
-                    logger.info(">>>>>>>>>>> child-rpc server start success, appName={}, port={}", NettyServer.class.getName(), serverConfig.getPort());
+                    logger.info(">>>>>>>>>>> child-rpc server start success, appName={}, port={}", NettyServerAbstract.class.getName(), serverConfig.getPort());
                     Channel serviceChannel = future.channel().closeFuture().sync().channel();
                 } catch (InterruptedException e) {
                     logger.error("", e);

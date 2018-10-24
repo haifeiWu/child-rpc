@@ -1,23 +1,31 @@
 package cn.whforever.core.serialize;
 
-import cn.whforever.core.serialize.impl.HessianSerializer;
-import cn.whforever.core.serialize.impl.JacksonSerializer;
+import cn.whforever.core.serialize.impl.HessianAbstractSerializer;
+import cn.whforever.core.serialize.impl.JacksonAbstractSerializer;
 
 /**
  * @author wuhf
  * @Date 2018/8/31 19:46
  **/
-public abstract class Serializer {
+public abstract class AbstractSerializer {
     public abstract <T> byte[] serialize(T obj);
     public abstract <T> Object deserialize(byte[] bytes, Class<T> clazz);
 
     public enum SerializeEnum {
-        HESSIAN(new HessianSerializer()),
+
+        /**
+         * hession 序列化.
+         */
+        HESSIAN(new HessianAbstractSerializer()),
 //        PROTOSTUFF(new ProtostuffSerializer()),
-        JSON(new JacksonSerializer());
+
+        /**
+         * json 序列化.
+         */
+        JSON(new JacksonAbstractSerializer());
 //
-        public final Serializer serializer;
-        private SerializeEnum (Serializer serializer) {
+        public final AbstractSerializer serializer;
+        private SerializeEnum (AbstractSerializer serializer) {
             this.serializer = serializer;
         }
         public static SerializeEnum match(String name, SerializeEnum defaultSerializer){
