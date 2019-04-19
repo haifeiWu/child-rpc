@@ -106,7 +106,7 @@ public class ZookeeperRegistry {
         }
 //        String addressInput = registryConfig.getAddress(); // xxx:2181,yyy:2181/path1/paht2
 //        if (StringUtils.isEmpty(addressInput)) {
-//            throw new SofaRpcRuntimeException("Address of zookeeper registry is empty.");
+//            throw new ChildRpcRuntimeException("Address of zookeeper registry is empty.");
 //        }
 //        int idx = addressInput.indexOf(CONTEXT_SEP);
 //        String address; // IP地址
@@ -149,7 +149,7 @@ public class ZookeeperRegistry {
         try {
             zkClient.start();
         } catch (Exception e) {
-//            throw new SofaRpcRuntimeException("Failed to start zookeeper zkClient", e);
+//            throw new ChildRpcRuntimeException("Failed to start zookeeper zkClient", e);
         }
         return zkClient.getState() == CuratorFrameworkState.STARTED;
     }
@@ -217,7 +217,7 @@ public class ZookeeperRegistry {
 //                    }
 //                }
 //            } catch (Exception e) {
-//                throw new SofaRpcRuntimeException("Failed to register provider to zookeeperRegistry!", e);
+//                throw new ChildRpcRuntimeException("Failed to register provider to zookeeperRegistry!", e);
 //            }
 //        }
 //
@@ -270,7 +270,7 @@ public class ZookeeperRegistry {
 //            INTERFACE_CONFIG_CACHE.put(configPath, pathChildrenCache);
 //            configObserver.updateConfigAll(config, configPath, pathChildrenCache.getCurrentData());
 //        } catch (Exception e) {
-//            throw new SofaRpcRuntimeException("Failed to subscribe provider config from zookeeperRegistry!", e);
+//            throw new ChildRpcRuntimeException("Failed to subscribe provider config from zookeeperRegistry!", e);
 //        }
 //    }
 
@@ -315,7 +315,7 @@ public class ZookeeperRegistry {
 //            INTERFACE_OVERRIDE_CACHE.put(overridePath, pathChildrenCache);
 //            overrideObserver.updateConfigAll(config, overridePath, pathChildrenCache.getCurrentData());
 //        } catch (Exception e) {
-//            throw new SofaRpcRuntimeException("Failed to subscribe provider config from zookeeperRegistry!", e);
+//            throw new ChildRpcRuntimeException("Failed to subscribe provider config from zookeeperRegistry!", e);
 //        }
 //    }
 
@@ -346,7 +346,7 @@ public class ZookeeperRegistry {
 //                }
 //            } catch (Exception e) {
 //                if (!RpcRunningState.isShuttingDown()) {
-//                    throw new SofaRpcRuntimeException("Failed to unregister provider to zookeeperRegistry!", e);
+//                    throw new ChildRpcRuntimeException("Failed to unregister provider to zookeeperRegistry!", e);
 //                }
 //            }
 //        }
@@ -361,7 +361,7 @@ public class ZookeeperRegistry {
 //                }
 //            } catch (Exception e) {
 //                if (!RpcRunningState.isShuttingDown()) {
-//                    throw new SofaRpcRuntimeException("Failed to unsubscribe provider config from zookeeperRegistry!",
+//                    throw new ChildRpcRuntimeException("Failed to unsubscribe provider config from zookeeperRegistry!",
 //                            e);
 //                }
 //            }
@@ -397,7 +397,7 @@ public class ZookeeperRegistry {
 //                        .forPath(consumerPath + CONTEXT_SEP + encodeUrl);
 //                consumerUrls.put(config, url);
 //            } catch (Exception e) {
-//                throw new SofaRpcRuntimeException("Failed to register consumer to zookeeperRegistry!", e);
+//                throw new ChildRpcRuntimeException("Failed to register consumer to zookeeperRegistry!", e);
 //            }
 //        }
 //        if (config.isSubscribe()) {
@@ -453,7 +453,7 @@ public class ZookeeperRegistry {
 //                List<ProviderInfo> matchProviders = ZookeeperRegistryHelper.matchProviderInfos(config, providerInfos);
 //                return Collections.singletonList(new ProviderGroup().addAll(matchProviders));
 //            } catch (Exception e) {
-//                throw new SofaRpcRuntimeException("Failed to subscribe provider from zookeeperRegistry!", e);
+//                throw new ChildRpcRuntimeException("Failed to subscribe provider from zookeeperRegistry!", e);
 //            }
 //        }
 //        return null;
@@ -472,7 +472,7 @@ public class ZookeeperRegistry {
 //                }
 //            } catch (Exception e) {
 //                if (!RpcRunningState.isShuttingDown()) {
-//                    throw new SofaRpcRuntimeException("Failed to unregister consumer to zookeeperRegistry!", e);
+//                    throw new ChildRpcRuntimeException("Failed to unregister consumer to zookeeperRegistry!", e);
 //                }
 //            }
 //        }
@@ -482,14 +482,14 @@ public class ZookeeperRegistry {
 //                providerObserver.removeProviderListener(config);
 //            } catch (Exception e) {
 //                if (!RpcRunningState.isShuttingDown()) {
-//                    throw new SofaRpcRuntimeException("Failed to unsubscribe provider from zookeeperRegistry!", e);
+//                    throw new ChildRpcRuntimeException("Failed to unsubscribe provider from zookeeperRegistry!", e);
 //                }
 //            }
 //            try {
 //                configObserver.removeConfigListener(config);
 //            } catch (Exception e) {
 //                if (!RpcRunningState.isShuttingDown()) {
-//                    throw new SofaRpcRuntimeException("Failed to unsubscribe consumer config from zookeeperRegistry!",
+//                    throw new ChildRpcRuntimeException("Failed to unsubscribe consumer config from zookeeperRegistry!",
 //                            e);
 //                }
 //            }
@@ -510,7 +510,7 @@ public class ZookeeperRegistry {
 
     private CuratorFramework getAndCheckZkClient() {
         if (zkClient == null || zkClient.getState() != CuratorFrameworkState.STARTED) {
-//            throw new SofaRpcRuntimeException("Zookeeper client is not available");
+//            throw new ChildRpcRuntimeException("Zookeeper client is not available");
         }
         return zkClient;
     }
