@@ -37,33 +37,30 @@ public class ClientProxy implements Proxy {
     public Object invoke() throws Exception {
         return java.lang.reflect.Proxy.newProxyInstance(Thread.currentThread()
                         .getContextClassLoader(), new Class[]{iface},
-                new InvocationHandler() {
-                    @Override
-                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                (proxy, method, args) -> {
 
-                        // request
-                        RpcRequest request = new RpcRequest();
-                        request.setRequestId(UUID.randomUUID().toString());
-                        request.setCreateMillisTime(System.currentTimeMillis());
-                        request.setClassName(method.getDeclaringClass().getName());
-                        request.setMethodName(method.getName());
-                        request.setParameterTypes(method.getParameterTypes());
-                        request.setParameters(args);
+                    // request
+                    RpcRequest request = new RpcRequest();
+                    request.setRequestId(UUID.randomUUID().toString());
+                    request.setCreateMillisTime(System.currentTimeMillis());
+                    request.setClassName(method.getDeclaringClass().getName());
+                    request.setMethodName(method.getName());
+                    request.setParameterTypes(method.getParameterTypes());
+                    request.setParameters(args);
 
-                        // send
-                        RpcResponse response = childClient.send(request);
+                    // send
+                    RpcResponse response = childClient.send(request);
 
-                        // valid response
-                        if (response == null) {
-                            throw new Exception(">>>>>>>>>>> child-rpc netty response not found.");
-                        }
-                        if (null != response.getError()) {
-                            throw response.getError();
-                        } else {
-                            return response.getResult();
-                        }
-
+                    // valid response
+                    if (response == null) {
+                        throw new Exception(">>>>>>>>>>> child-rpc netty response not found.");
                     }
+                    if (null != response.getError()) {
+                        throw response.getError();
+                    } else {
+                        return response.getResult();
+                    }
+
                 });
     }
 
