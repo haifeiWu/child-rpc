@@ -1,5 +1,7 @@
 package cn.whforever.core.util;
 
+import cn.whforever.core.exception.ChildRpcRuntimeException;
+import cn.whforever.core.utils.CommonUtils;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -7,6 +9,8 @@ import org.apache.curator.framework.imps.CuratorFrameworkState;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static cn.whforever.core.util.StringUtils.CONTEXT_SEP;
 
 /**
  * @author wuhf
@@ -105,33 +109,40 @@ public class ZookeeperRegistry {
             return;
         }
 //        String addressInput = registryConfig.getAddress(); // xxx:2181,yyy:2181/path1/paht2
-//        if (StringUtils.isEmpty(addressInput)) {
-//            throw new ChildRpcRuntimeException("Address of zookeeper registry is empty.");
-//        }
-//        int idx = addressInput.indexOf(CONTEXT_SEP);
-//        String address; // IP地址
-//        if (idx > 0) {
-//            address = addressInput.substring(0, idx);
-//            rootPath = addressInput.substring(idx);
-//            if (!rootPath.endsWith(CONTEXT_SEP)) {
-//                rootPath += CONTEXT_SEP; // 保证以"/"结尾
-//            }
-//        } else {
-//            address = addressInput;
-//            rootPath = CONTEXT_SEP;
-//        }
+        String addressInput = "";
+        if (StringUtils.isEmpty(addressInput)) {
+            throw new ChildRpcRuntimeException("Address of zookeeper registry is empty.");
+        }
+        int idx = addressInput.indexOf(CONTEXT_SEP);
+        String address; // IP地址
+        if (idx > 0) {
+            address = addressInput.substring(0, idx);
+            rootPath = addressInput.substring(idx);
+            if (!rootPath.endsWith(CONTEXT_SEP)) {
+                rootPath += CONTEXT_SEP; // 保证以"/"结尾
+            }
+        } else {
+            address = addressInput;
+            rootPath = CONTEXT_SEP;
+        }
 //        preferLocalFile = !CommonUtils.isFalse(registryConfig.getParameter(PARAM_PREFER_LOCAL_FILE));
 //        ephemeralNode = !CommonUtils.isFalse(registryConfig.getParameter(PARAM_CREATE_EPHEMERAL));
-//        if (LOGGER.isInfoEnabled()) {
-//            LOGGER.info(
-//                    "Init ZookeeperRegistry with address {}, root path is {}. preferLocalFile:{}, ephemeralNode:{}",
-//                    address, rootPath, preferLocalFile, ephemeralNode);
-//        }
+
+        preferLocalFile = !CommonUtils.isFalse("");
+        ephemeralNode = !CommonUtils.isFalse("");
+
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info(
+                    "Init ZookeeperRegistry with address {}, root path is {}. preferLocalFile:{}, ephemeralNode:{}",
+                    address, rootPath, preferLocalFile, ephemeralNode);
+        }
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
         zkClient = CuratorFrameworkFactory.builder()
-//                .connectString(address)
+                .connectString(address)
 //                .sessionTimeoutMs(registryConfig.getConnectTimeout() * 3)
 //                .connectionTimeoutMs(registryConfig.getConnectTimeout())
+                .sessionTimeoutMs(1000)
+                .connectionTimeoutMs(1000)
                 .canBeReadOnly(false)
                 .retryPolicy(retryPolicy)
                 .defaultData(null)
@@ -510,7 +521,7 @@ public class ZookeeperRegistry {
 
     private CuratorFramework getAndCheckZkClient() {
         if (zkClient == null || zkClient.getState() != CuratorFrameworkState.STARTED) {
-//            throw new ChildRpcRuntimeException("Zookeeper client is not available");
+            throw new ChildRpcRuntimeException("Zookeeper client is not available");
         }
         return zkClient;
     }
