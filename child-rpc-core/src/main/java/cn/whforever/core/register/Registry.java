@@ -45,7 +45,7 @@ public abstract class Registry {
      * @return is started
      */
     public abstract boolean start();
-
+//
 //    /**
 //     * 注册服务提供者
 //     *
