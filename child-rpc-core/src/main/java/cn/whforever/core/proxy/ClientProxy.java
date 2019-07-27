@@ -5,8 +5,6 @@ import cn.whforever.core.remote.client.AbstractChildClient;
 import cn.whforever.core.rpc.RpcRequest;
 import cn.whforever.core.rpc.RpcResponse;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.util.UUID;
 
 /**
@@ -34,7 +32,7 @@ public class ClientProxy implements Proxy {
         return null;
     }
 
-    public Object invoke() throws Exception {
+    public Object invoke() {
         return java.lang.reflect.Proxy.newProxyInstance(Thread.currentThread()
                         .getContextClassLoader(), new Class[]{iface},
                 (proxy, method, args) -> {
@@ -55,12 +53,12 @@ public class ClientProxy implements Proxy {
                     if (response == null) {
                         throw new Exception(">>>>>>>>>>> child-rpc netty response not found.");
                     }
+
                     if (null != response.getError()) {
                         throw response.getError();
-                    } else {
-                        return response.getResult();
                     }
-
+                    
+                    return response.getResult();
                 });
     }
 

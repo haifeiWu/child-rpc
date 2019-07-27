@@ -5,5 +5,5 @@ package cn.whforever.example.service;
  * @Date 2018/9/1 18:41
  **/
 public interface HelloService {
-    public String sayHi();
+    String sayHi();
 }

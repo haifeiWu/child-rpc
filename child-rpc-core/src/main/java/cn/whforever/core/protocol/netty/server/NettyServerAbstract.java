@@ -49,14 +49,14 @@ public class NettyServerAbstract extends AbstractChildServer {
                     logger.info(">>>>>>>>>>> child-rpc server start success, appName={}, port={}", NettyServerAbstract.class.getName(), serverConfig.getPort());
                     Channel serviceChannel = future.channel().closeFuture().sync().channel();
                 } catch (InterruptedException e) {
-                    logger.error("", e);
+                    logger.error(">>>>>> ", e);
                 } finally {
                     workerGroup.shutdownGracefully();
                     bossGroup.shutdownGracefully();
                 }
             }
         });
-//        thread.setDaemon(true);
+        thread.setDaemon(true);
         thread.start();
     }
 
