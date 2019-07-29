@@ -13,6 +13,11 @@ public class ClientConfig implements Config {
     protected long timeoutMillis;
     private AbstractSerializer serializer;
 
+    /**
+     * 协议
+     */
+    private String protocol;
+
     public String getHost() {
         return host;
     }
@@ -46,6 +51,15 @@ public class ClientConfig implements Config {
 
     public ClientConfig setTimeoutMillis(long timeoutMillis) {
         this.timeoutMillis = timeoutMillis;
+        return this;
+    }
+
+    public String getProtocol() {
+        return protocol;
+    }
+
+    public ClientConfig setProtocol(String protocol) {
+        this.protocol = protocol;
         return this;
     }
 }

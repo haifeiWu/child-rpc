@@ -21,7 +21,7 @@ import cn.whforever.core.config.RegistryConfig;
 /**
  * Registry SPI
  *
- * @author <a href=mailto:zhanggeng.zg@antfin.com>GengZhang</a>
+ * @author wuhaifei
  */
 public abstract class Registry {
 

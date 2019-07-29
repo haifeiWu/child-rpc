@@ -7,6 +7,11 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.util.List;
 
+/**
+ * netty的解码器.
+ *
+ * @author wuhaifei
+ */
 public class NettyDecoder extends ByteToMessageDecoder {
 
     private Class<?> genericClass;
@@ -37,7 +42,7 @@ public class NettyDecoder extends ByteToMessageDecoder {
         try {
             byte[] data = new byte[dataLength];
             byteBuf.readBytes(data);
-            Object object = serializer.deserialize(data,genericClass);
+            Object object = serializer.deserialize(data, genericClass);
             list.add(object);
         } catch (Exception e) {
             e.printStackTrace();

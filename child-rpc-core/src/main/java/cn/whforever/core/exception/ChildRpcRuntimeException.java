@@ -17,9 +17,9 @@
 package cn.whforever.core.exception;
 
 /**
- * SOFA RPC Runtime Exception, all rpc runtime exception will extends it
+ * RPC的自定义异常.
  *
- * @author <a href="mailto:zhanggeng.zg@antfin.com">GengZhang</a>
+ * @author wuhaifei
  */
 public class ChildRpcRuntimeException extends RuntimeException {
 

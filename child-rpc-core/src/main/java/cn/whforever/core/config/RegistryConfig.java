@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 注册中心配置
  *
- * @author <a href=mailto:zhanggeng.zg@antfin.com>GengZhang</a>
+ * @author wuhaifei
  */
 public class RegistryConfig extends AbstractIdConfig implements Serializable {
     /**

@@ -2,6 +2,7 @@ package cn.whforever.core.proxy;
 
 import cn.whforever.core.config.Config;
 import cn.whforever.core.remote.client.AbstractChildClient;
+import cn.whforever.core.rpc.RpcConstants;
 import cn.whforever.core.rpc.RpcRequest;
 import cn.whforever.core.rpc.RpcResponse;
 

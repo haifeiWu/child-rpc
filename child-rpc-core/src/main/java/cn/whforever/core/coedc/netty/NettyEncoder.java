@@ -6,6 +6,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
+ * netty的编码器.
+ *
  * @author wuhf
  * @Date 2018/8/31 19:18
  **/
@@ -14,7 +16,7 @@ public class NettyEncoder extends MessageToByteEncoder<Object> {
     private Class<?> genericClass;
     private AbstractSerializer serializer;
 
-    public NettyEncoder(Class<?> genericClass,AbstractSerializer serializer) {
+    public NettyEncoder(Class<?> genericClass, AbstractSerializer serializer) {
         this.serializer = serializer;
         this.genericClass = genericClass;
     }

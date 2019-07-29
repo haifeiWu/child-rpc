@@ -17,6 +17,11 @@ public class ServerConfig implements Config {
 
     private Object interfaceId;
 
+    /**
+     * 协议
+     */
+    private String protocol = "";
+
     public int getPort() {
         return port;
     }
@@ -61,6 +66,15 @@ public class ServerConfig implements Config {
 
     public ServerConfig setInterfaceId(Object interfaceId) {
         this.interfaceId = interfaceId;
+        return this;
+    }
+
+    public String getProtocol() {
+        return protocol;
+    }
+
+    public ServerConfig setProtocol(String protocol) {
+        this.protocol = protocol;
         return this;
     }
 }
