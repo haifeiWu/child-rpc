@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.whforever.core.utils;
+package cn.whforever.core.util;
 
 /**
  * 缓存了一些ClassLoader的对应关系，让应用和服务可以找到对应的ClassLoader。

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.whforever.core.utils;
+package cn.whforever.core.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,7 +51,7 @@ public class CommonUtils {
      * @return 不为空，且为true
      */
     public static boolean isTrue(String b) {
-        return b != null && StringUtils.TRUE.equalsIgnoreCase(b);
+        return b != null && ClassTypeUtils.StringUtils.TRUE.equalsIgnoreCase(b);
     }
 
     /**
@@ -81,7 +81,7 @@ public class CommonUtils {
      * @return 不为空，且为true
      */
     public static boolean isFalse(String b) {
-        return b != null && StringUtils.FALSE.equalsIgnoreCase(b);
+        return b != null && ClassTypeUtils.StringUtils.FALSE.equalsIgnoreCase(b);
     }
 
     /**
@@ -217,7 +217,7 @@ public class CommonUtils {
      * @return int[]
      */
     public static int[] parseInts(String nums, String sperator) {
-        String[] ss = StringUtils.split(nums, sperator);
+        String[] ss = ClassTypeUtils.StringUtils.split(nums, sperator);
         int[] ints = new int[ss.length];
         for (int i = 0; i < ss.length; i++) {
             ints[i] = Integer.parseInt(ss[i]);
@@ -262,17 +262,17 @@ public class CommonUtils {
      */
     public static String join(Collection collection, String separator) {
         if (isEmpty(collection)) {
-            return StringUtils.EMPTY;
+            return ClassTypeUtils.StringUtils.EMPTY;
         }
         StringBuilder sb = new StringBuilder();
         for (Object object : collection) {
             if (object != null) {
-                String string = StringUtils.toString(object);
+                String string = ClassTypeUtils.StringUtils.toString(object);
                 if (string != null) {
                     sb.append(string).append(separator);
                 }
             }
         }
-        return sb.length() > 0 ? sb.substring(0, sb.length() - separator.length()) : StringUtils.EMPTY;
+        return sb.length() > 0 ? sb.substring(0, sb.length() - separator.length()) : ClassTypeUtils.StringUtils.EMPTY;
     }
 }

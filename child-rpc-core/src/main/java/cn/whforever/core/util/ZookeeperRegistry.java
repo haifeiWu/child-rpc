@@ -1,7 +1,6 @@
 package cn.whforever.core.util;
 
 import cn.whforever.core.exception.ChildRpcRuntimeException;
-import cn.whforever.core.utils.CommonUtils;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;

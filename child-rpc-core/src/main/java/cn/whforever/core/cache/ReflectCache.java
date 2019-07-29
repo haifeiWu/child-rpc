@@ -16,7 +16,7 @@
  */
 package cn.whforever.core.cache;
 
-import cn.whforever.core.utils.ClassLoaderUtils;
+import cn.whforever.core.util.ClassLoaderUtils;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;

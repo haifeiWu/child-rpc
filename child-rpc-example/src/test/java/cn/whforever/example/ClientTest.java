@@ -20,9 +20,9 @@ public class ClientTest {
                 .setProtocol(RpcConstants.DIRECT_CONN)
                 .setTimeoutMillis(100000)
                 .setSerializer(AbstractSerializer.SerializeEnum.HESSIAN.serializer);
-        ClientProxy clientProxy = new ClientProxy(clientConfig,new NettyClientAbstract(),HelloService.class);
+        ClientProxy<HelloService> clientProxy = new ClientProxy(clientConfig,new NettyClientAbstract(),HelloService.class);
         for (int i = 0; i < 10; i++) {
-            HelloService helloService = (HelloService) clientProxy.refer();
+            HelloService helloService = clientProxy.refer();
             System.out.println(helloService.sayHi());
         }
     }

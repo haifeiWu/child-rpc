@@ -17,7 +17,7 @@
 package cn.whforever.core.log;
 
 import cn.whforever.core.exception.ChildRpcRuntimeException;
-import cn.whforever.core.utils.ClassUtils;
+import cn.whforever.core.util.ClassUtils;
 
 /**
  * Factory of logger.

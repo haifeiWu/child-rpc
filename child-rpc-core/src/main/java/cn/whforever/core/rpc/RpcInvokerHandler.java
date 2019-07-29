@@ -1,5 +1,7 @@
 package cn.whforever.core.rpc;
 
+import cn.whforever.core.exception.ChildRpcRuntimeException;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +31,7 @@ public class RpcInvokerHandler {
             response.setResult(result);
         } catch (Throwable t) {
             t.printStackTrace();
-            response.setError(t);
+            response.setError(new ChildRpcRuntimeException(t));
         }
 
         return response;

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.whforever.core.utils;
+package cn.whforever.core.util;
 
 
 import cn.whforever.core.exception.ChildRpcRuntimeException;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static cn.whforever.core.utils.ClassLoaderUtils.getCurrentClassLoader;
+import static cn.whforever.core.util.ClassLoaderUtils.getCurrentClassLoader;
 
 /**
  * Class工具类

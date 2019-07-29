@@ -1,8 +1,8 @@
 package cn.whforever.core.proxy;
 
 import cn.whforever.core.config.Config;
+import cn.whforever.core.exception.ChildRpcRuntimeException;
 import cn.whforever.core.remote.client.AbstractChildClient;
-import cn.whforever.core.rpc.RpcConstants;
 import cn.whforever.core.rpc.RpcRequest;
 import cn.whforever.core.rpc.RpcResponse;
 
@@ -12,18 +12,18 @@ import java.util.UUID;
  * @author wuhf
  * @Date 2018/9/1 17:04
  **/
-public class ClientProxy implements Proxy {
+public class ClientProxy<T> implements Proxy {
     private AbstractChildClient childClient;
     private Config config;
-    private Class<?> iface;
+    private Class<T> iface;
 
-    public ClientProxy(Config config, AbstractChildClient childClient, Class<?> iface) {
+    public ClientProxy(Config config, AbstractChildClient childClient, Class<T> iface) {
         this.childClient = childClient;
         this.config = config;
         this.iface = iface;
     }
 
-    public Object refer() {
+    public T refer() {
         try {
             childClient.init(this.config);
             return invoke();
@@ -33,8 +33,8 @@ public class ClientProxy implements Proxy {
         return null;
     }
 
-    public Object invoke() {
-        return java.lang.reflect.Proxy.newProxyInstance(Thread.currentThread()
+    public T invoke() {
+        return (T)java.lang.reflect.Proxy.newProxyInstance(Thread.currentThread()
                         .getContextClassLoader(), new Class[]{iface},
                 (proxy, method, args) -> {
 
@@ -52,11 +52,11 @@ public class ClientProxy implements Proxy {
 
                     // valid response
                     if (response == null) {
-                        throw new Exception(">>>>>>>>>>> child-rpc netty response not found.");
+                        throw new ChildRpcRuntimeException(">>>>>>>>>>> child-rpc netty response not found.");
                     }
 
                     if (null != response.getError()) {
-                        throw response.getError();
+                        throw new ChildRpcRuntimeException(response.getError());
                     }
                     
                     return response.getResult();
