@@ -20,6 +20,8 @@ import cn.whforever.core.config.RegistryConfig;
 import cn.whforever.core.exception.ChildRpcRuntimeException;
 import cn.whforever.core.log.Logger;
 import cn.whforever.core.log.LoggerFactory;
+import cn.whforever.core.rpc.RpcConstants;
+import cn.whforever.core.util.ZookeeperRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +63,7 @@ public class RegistryFactory {
             // 注意：RegistryConfig重写了equals方法，如果多个RegistryConfig属性一样，则认为是一个对象
             Registry registry = ALL_REGISTRIES.get(registryConfig);
             if (registry == null) {
+                // TODO 使用SPI的方式生成服务注册
 //                ExtensionClass<Registry> ext = ExtensionLoaderFactory.getExtensionLoader(Registry.class)
 //                        .getExtensionClass(registryConfig.getProtocol());
 //                if (ext == null) {
@@ -68,6 +71,10 @@ public class RegistryFactory {
 //                            "Unsupported protocol of registry config !");
 //                }
 //                registry = ext.getExtInstance(new Class[]{RegistryConfig.class}, new Object[]{registryConfig});
+
+                if (RpcConstants.ZOOKEEPER.equalsIgnoreCase(registryConfig.getProtocol())) {
+                    registry = new ZookeeperRegistry(registryConfig);
+                }
                 ALL_REGISTRIES.put(registryConfig, registry);
             }
             return registry;

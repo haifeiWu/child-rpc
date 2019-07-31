@@ -16,7 +16,11 @@
  */
 package cn.whforever.core.register;
 
+import cn.whforever.core.config.ClientConfig;
 import cn.whforever.core.config.RegistryConfig;
+import cn.whforever.core.config.ServerConfig;
+
+import java.util.List;
 
 /**
  * Registry SPI
@@ -51,22 +55,22 @@ public abstract class Registry {
      *
      * @param config Provider配置
      */
-//    public abstract void register(ProviderConfig config);
-//
-//    /**
-//     * 反注册服务提供者
-//     *
-//     * @param config Provider配置
-//     */
-//    public abstract void unRegister(ProviderConfig config);
-//
-//    /**
-//     * 反注册服务提供者
-//     *
-//     * @param configs Provider配置
-//     */
-//    public abstract void batchUnRegister(List<ProviderConfig> configs);
-//
+    public abstract void register(ServerConfig config);
+
+    /**
+     * 反注册服务提供者
+     *
+     * @param config Provider配置
+     */
+    public abstract void unRegister(ServerConfig config);
+
+    /**
+     * 反注册服务提供者
+     *
+     * @param configs Provider配置
+     */
+    public abstract void batchUnRegister(List<ServerConfig> configs);
+
 //    /**
 //     * 订阅服务列表
 //     *
@@ -74,21 +78,21 @@ public abstract class Registry {
 //     * @return 当前Provider列表，返回null表示未同步获取到地址
 //     */
 //    public abstract List<ProviderGroup> subscribe(ConsumerConfig config);
-//
-//    /**
-//     * 反订阅服务调用者相关配置
-//     *
-//     * @param config Consumer配置
-//     */
-//    public abstract void unSubscribe(ConsumerConfig config);
-//
-//    /**
-//     * 反订阅服务调用者相关配置
-//     *
-//     * @param configs Consumer配置
-//     */
-//    public abstract void batchUnSubscribe(List<ConsumerConfig> configs);
-//
+
+    /**
+     * 反订阅服务调用者相关配置
+     *
+     * @param config Consumer配置
+     */
+    public abstract void unSubscribe(ClientConfig config);
+
+    /**
+     * 反订阅服务调用者相关配置
+     *
+     * @param configs Consumer配置
+     */
+    public abstract void batchUnSubscribe(List<ClientConfig> configs);
+
 //    @Override
 //    public void destroy(DestroyHook hook) {
 //        if (hook != null) {

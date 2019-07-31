@@ -22,6 +22,8 @@ public class ServerConfig implements Config {
      */
     private String protocol = "";
 
+    private boolean register = true;
+
     public int getPort() {
         return port;
     }
@@ -75,6 +77,15 @@ public class ServerConfig implements Config {
 
     public ServerConfig setProtocol(String protocol) {
         this.protocol = protocol;
+        return this;
+    }
+
+    public boolean isRegister() {
+        return register;
+    }
+
+    public ServerConfig setRegister(boolean register) {
+        this.register = register;
         return this;
     }
 }

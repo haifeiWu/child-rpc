@@ -1,6 +1,10 @@
 package cn.whforever.core.util;
 
+import cn.whforever.core.config.ClientConfig;
+import cn.whforever.core.config.RegistryConfig;
+import cn.whforever.core.config.ServerConfig;
 import cn.whforever.core.exception.ChildRpcRuntimeException;
+import cn.whforever.core.register.Registry;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -9,13 +13,15 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 import static cn.whforever.core.util.StringUtils.CONTEXT_SEP;
 
 /**
  * @author wuhf
  * @Date 2018/9/12 16:27
  **/
-public class ZookeeperRegistry {
+public class ZookeeperRegistry extends Registry {
     /**
      * slf4j Logger for this class
      */
@@ -33,7 +39,7 @@ public class ZookeeperRegistry {
     /**
      * 配置项：是否本地优先
      */
-    public final static String                PARAM_PREFER_LOCAL_FILE = "preferLocalFile";
+    public final static String PARAM_PREFER_LOCAL_FILE = "preferLocalFile";
 
     /**
      * 配置项：是否使用临时节点。<br>
@@ -42,32 +48,32 @@ public class ZookeeperRegistry {
      * 如果使用永久节点：好处：网络闪断时不会影响服务端，而是由客户端进行自己判断长连接<br>
      * 坏处：服务端如果是异常关闭（无反注册），那么数据里就由垃圾节点，得由另外的哨兵程序进行判断
      */
-    public final static String                PARAM_CREATE_EPHEMERAL  = "createEphemeral";
+    public final static String PARAM_CREATE_EPHEMERAL = "createEphemeral";
     /**
      * 服务被下线
      */
-    private final static byte[]               PROVIDER_OFFLINE        = new byte[] { 0 };
+    private final static byte[] PROVIDER_OFFLINE = new byte[]{0};
     /**
      * 正常在线服务
      */
-    private final static byte[]               PROVIDER_ONLINE         = new byte[] { 1 };
+    private final static byte[] PROVIDER_ONLINE = new byte[]{1};
 
     /**
      * Zookeeper zkClient
      */
-    private CuratorFramework                  zkClient;
+    private CuratorFramework zkClient;
 
     /**
      * Root path of registry data
      */
-    private String                            rootPath;
+    private String rootPath;
 
     /**
      * Prefer get data from local file to remote zk cluster.
      *
      * @see ZookeeperRegistry#PARAM_PREFER_LOCAL_FILE
      */
-    private boolean                           preferLocalFile         = false;
+    private boolean preferLocalFile = false;
 
     /**
      * Create EPHEMERAL node when true, otherwise PERSISTENT
@@ -76,7 +82,16 @@ public class ZookeeperRegistry {
      * @see CreateMode#PERSISTENT
      * @see CreateMode#EPHEMERAL
      */
-    private boolean                           ephemeralNode           = true;
+    private boolean ephemeralNode = true;
+
+    /**
+     * 注册中心配置
+     *
+     * @param registryConfig 注册中心配置
+     */
+    public ZookeeperRegistry(RegistryConfig registryConfig) {
+        super(registryConfig);
+    }
 //
 //    /**
 //     * 接口级配置项观察者
@@ -148,6 +163,7 @@ public class ZookeeperRegistry {
                 .build();
     }
 
+    @Override
     public synchronized boolean start() {
         if (zkClient == null) {
             LOGGER.warn("Start zookeeper registry must be do init first!");
@@ -185,14 +201,14 @@ public class ZookeeperRegistry {
 //     */
 //    private static final ConcurrentMap<String, PathChildrenCache> INTERFACE_CONFIG_CACHE   = new ConcurrentHashMap<String, PathChildrenCache>();
 
-//    /**
+    //    /**
 //     * IP配置{接口配置路径：PathChildrenCache} <br>
 //     * 例如：{/sofa-rpc/com.alipay.sofa.rpc.example/overrides ： PathChildrenCache }
 //     */
 //    private static final ConcurrentMap<String, PathChildrenCache> INTERFACE_OVERRIDE_CACHE = new ConcurrentHashMap<String, PathChildrenCache>();
 //
-//    @Override
-//    public void register(ProviderConfig config) {
+    @Override
+    public void register(ServerConfig config) {
 //        String appName = config.getAppName();
 //        if (!registryConfig.isRegister()) {
 //            if (LOGGER.isInfoEnabled(appName)) {
@@ -238,7 +254,7 @@ public class ZookeeperRegistry {
 //                subscribeConfig(config, config.getConfigListener());
 //            }
 //        }
-//    }
+    }
 
 //    /**
 //     * 订阅接口级配置
@@ -329,8 +345,8 @@ public class ZookeeperRegistry {
 //        }
 //    }
 
-//    @Override
-//    public void unRegister(ProviderConfig config) {
+    @Override
+    public void unRegister(ServerConfig config) {
 //        String appName = config.getAppName();
 //        if (!registryConfig.isRegister()) {
 //            // 注册中心不注册
@@ -376,10 +392,10 @@ public class ZookeeperRegistry {
 //                }
 //            }
 //        }
-//    }
+    }
 
-//    @Override
-//    public void batchUnRegister(List<ProviderConfig> configs) {
+    @Override
+    public void batchUnRegister(List<ServerConfig> configs) {
 //        // 一个一个来，后续看看要不要使用curator的事务
 //        for (ProviderConfig config : configs) {
 //            unRegister(config);
@@ -467,10 +483,10 @@ public class ZookeeperRegistry {
 //            }
 //        }
 //        return null;
-//    }
+    }
 
-//    @Override
-//    public void unSubscribe(ConsumerConfig config) {
+    @Override
+    public void unSubscribe(ClientConfig config) {
 //        // 反注册服务端节点
 //        if (config.isRegister()) {
 //            try {
@@ -504,15 +520,15 @@ public class ZookeeperRegistry {
 //                }
 //            }
 //        }
-//    }
+    }
 
-//    @Override
-//    public void batchUnSubscribe(List<ConsumerConfig> configs) {
-//        // 一个一个来，后续看看要不要使用curator的事务
-//        for (ConsumerConfig config : configs) {
-//            unSubscribe(config);
-//        }
-//    }
+    @Override
+    public void batchUnSubscribe(List<ClientConfig> configs) {
+        // 一个一个来，后续看看要不要使用curator的事务
+        for (ClientConfig config : configs) {
+            unSubscribe(config);
+        }
+    }
 
     protected CuratorFramework getZkClient() {
         return zkClient;
