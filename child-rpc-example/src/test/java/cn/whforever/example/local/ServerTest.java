@@ -1,4 +1,4 @@
-package cn.whforever.example;
+package cn.whforever.example.local;
 
 import cn.whforever.core.config.ServerConfig;
 import cn.whforever.core.protocol.netty.server.NettyServerAbstract;

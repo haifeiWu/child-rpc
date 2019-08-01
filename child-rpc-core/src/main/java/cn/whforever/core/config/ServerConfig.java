@@ -6,7 +6,7 @@ import cn.whforever.core.serialize.AbstractSerializer;
  * @author wuhf
  * @Date 2018/9/1 15:05
  **/
-public class ServerConfig implements Config {
+public class ServerConfig extends Config {
 
     private int port;
     private AbstractSerializer serializer;
@@ -62,15 +62,6 @@ public class ServerConfig implements Config {
         return this;
     }
 
-    public Object getInterfaceId() {
-        return interfaceId;
-    }
-
-    public ServerConfig setInterfaceId(Object interfaceId) {
-        this.interfaceId = interfaceId;
-        return this;
-    }
-
     public String getProtocol() {
         return protocol;
     }
@@ -80,12 +71,4 @@ public class ServerConfig implements Config {
         return this;
     }
 
-    public boolean isRegister() {
-        return register;
-    }
-
-    public ServerConfig setRegister(boolean register) {
-        this.register = register;
-        return this;
-    }
 }

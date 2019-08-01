@@ -21,7 +21,7 @@ import cn.whforever.core.exception.ChildRpcRuntimeException;
 import cn.whforever.core.log.Logger;
 import cn.whforever.core.log.LoggerFactory;
 import cn.whforever.core.rpc.RpcConstants;
-import cn.whforever.core.util.ZookeeperRegistry;
+import cn.whforever.core.registry.ZookeeperRegistry;
 
 import java.util.ArrayList;
 import java.util.List;

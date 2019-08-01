@@ -6,7 +6,7 @@ import cn.whforever.core.serialize.AbstractSerializer;
  * @author wuhf
  * @Date 2018/9/1 15:02
  **/
-public class ClientConfig implements Config {
+public class ClientConfig extends Config {
 
     private String host;
     private int port;
