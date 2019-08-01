@@ -1,7 +1,10 @@
 package cn.whforever.core.proxy;
 
 import cn.whforever.core.config.Config;
+import cn.whforever.core.config.RegistryConfig;
 import cn.whforever.core.exception.ChildRpcRuntimeException;
+import cn.whforever.core.register.Registry;
+import cn.whforever.core.register.RegistryFactory;
 import cn.whforever.core.remote.client.AbstractChildClient;
 import cn.whforever.core.rpc.RpcRequest;
 import cn.whforever.core.rpc.RpcResponse;
@@ -16,6 +19,7 @@ public class ClientProxy<T> implements Proxy {
     private AbstractChildClient childClient;
     private Config config;
     private Class<T> iface;
+    private RegistryConfig registryConfig;
 
     public ClientProxy(Config config, AbstractChildClient childClient, Class<T> iface) {
         this.childClient = childClient;
@@ -25,6 +29,9 @@ public class ClientProxy<T> implements Proxy {
 
     public T refer() {
         try {
+            if (config.isSubscribe()) {
+                subscribe();
+            }
             childClient.init(this.config);
             return invoke();
         } catch (Exception e) {
@@ -33,8 +40,19 @@ public class ClientProxy<T> implements Proxy {
         return null;
     }
 
+    /**
+     * 订阅zk的服务列表.
+     */
+    private void subscribe() {
+        Registry registry = RegistryFactory.getRegistry(this.getRegistryConfig());
+        registry.init();
+        registry.start();
+
+        // 使用随机算法，随机选择一个provider
+    }
+
     public T invoke() {
-        return (T)java.lang.reflect.Proxy.newProxyInstance(Thread.currentThread()
+        return (T) java.lang.reflect.Proxy.newProxyInstance(Thread.currentThread()
                         .getContextClassLoader(), new Class[]{iface},
                 (proxy, method, args) -> {
 
@@ -58,9 +76,17 @@ public class ClientProxy<T> implements Proxy {
                     if (null != response.getError()) {
                         throw new ChildRpcRuntimeException(response.getError());
                     }
-                    
+
                     return response.getResult();
                 });
     }
 
+    public RegistryConfig getRegistryConfig() {
+        return registryConfig;
+    }
+
+    public ClientProxy setRegistryConfig(RegistryConfig registryConfig) {
+        this.registryConfig = registryConfig;
+        return this;
+    }
 }

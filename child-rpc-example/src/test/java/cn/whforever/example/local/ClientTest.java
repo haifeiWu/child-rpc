@@ -19,8 +19,9 @@ public class ClientTest {
                 .setPort(5201)
                 .setProtocol(RpcConstants.DIRECT_CONN)
                 .setTimeoutMillis(100000)
-                .setSerializer(AbstractSerializer.SerializeEnum.HESSIAN.serializer);
-        ClientProxy<HelloService> clientProxy = new ClientProxy(clientConfig,new NettyClientAbstract(),HelloService.class);
+                .setSerializer(AbstractSerializer.SerializeEnum.HESSIAN.serializer)
+                .setRegister(false);
+        ClientProxy<HelloService> clientProxy = new ClientProxy(clientConfig, new NettyClientAbstract(), HelloService.class);
         for (int i = 0; i < 10; i++) {
             HelloService helloService = clientProxy.refer();
             System.out.println(helloService.sayHi());

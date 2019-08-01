@@ -16,6 +16,8 @@
  */
 package cn.whforever.core.register;
 
+import cn.whforever.core.common.Destroyable;
+import cn.whforever.core.common.Initializable;
 import cn.whforever.core.config.ClientConfig;
 import cn.whforever.core.config.RegistryConfig;
 import cn.whforever.core.config.ServerConfig;
@@ -27,7 +29,7 @@ import java.util.List;
  *
  * @author wuhaifei
  */
-public abstract class Registry {
+public abstract class Registry implements Initializable,Destroyable {
 
     /**
      * 注册中心服务配置
@@ -93,15 +95,15 @@ public abstract class Registry {
      */
     public abstract void batchUnSubscribe(List<ClientConfig> configs);
 
-//    @Override
-//    public void destroy(DestroyHook hook) {
-//        if (hook != null) {
-//            hook.preDestroy();
-//        }
-//        destroy();
-//        if (hook != null) {
-//            hook.postDestroy();
-//        }
-//    }
+    @Override
+    public void destroy(DestroyHook hook) {
+        if (hook != null) {
+            hook.preDestroy();
+        }
+        destroy();
+        if (hook != null) {
+            hook.postDestroy();
+        }
+    }
 
 }

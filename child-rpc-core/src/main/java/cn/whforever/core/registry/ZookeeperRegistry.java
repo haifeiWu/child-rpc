@@ -127,6 +127,7 @@ public class ZookeeperRegistry extends Registry {
     /**
      * 初始化zookeeper
      */
+    @Override
     public synchronized void init() {
         if (zkClient != null) {
             return;
@@ -190,6 +191,7 @@ public class ZookeeperRegistry extends Registry {
         return zkClient.getState() == CuratorFrameworkState.STARTED;
     }
 
+    @Override
     public void destroy() {
         if (zkClient != null && zkClient.getState() == CuratorFrameworkState.STARTED) {
             zkClient.close();
@@ -198,12 +200,12 @@ public class ZookeeperRegistry extends Registry {
         consumerUrls.clear();
     }
 
-//    @Override
-//    public void destroy(DestroyHook hook) {
-//        hook.preDestroy();
-//        destroy();
-//        hook.postDestroy();
-//    }
+    @Override
+    public void destroy(DestroyHook hook) {
+        hook.preDestroy();
+        destroy();
+        hook.postDestroy();
+    }
 
     @Override
     public void register(ServerConfig config) {
@@ -215,14 +217,10 @@ public class ZookeeperRegistry extends Registry {
         if (config.isRegister()) {
             // 注册服务端节点
             try {
-//                List<String> urls = ZookeeperRegistryHelper.convertProviderToUrls(config);
-//                List<String> urls = new ArrayList<>();
                 String url = ZookeeperRegistryHelper.convertProviderToUrls(config);
-//                if (CommonUtils.isNotEmpty(urls)) {
                 if (StringUtils.isNotBlank(url)) {
                     String providerPath = buildProviderPath(rootPath, config);
                     // do some logger
-//                    for (String url : urls) {
                     url = URLEncoder.encode(url, "UTF-8");
                     String providerUrl = providerPath + CONTEXT_SEP + url;
                     getAndCheckZkClient().create().creatingParentContainersIfNeeded()
@@ -230,7 +228,6 @@ public class ZookeeperRegistry extends Registry {
 //                                .forPath(providerUrl, config.isDynamic() ? PROVIDER_ONLINE : PROVIDER_OFFLINE); // 是否默认上下线
                             .forPath(providerUrl, PROVIDER_ONLINE);
                     // do some log
-//                    }
                     providerUrls.put(config, url);
                     // do some log
                 }
@@ -275,14 +272,14 @@ public class ZookeeperRegistry extends Registry {
         String appName = (String) config.getInterfaceId();
         if (!registryConfig.isSubscribe()) {
             // 注册中心不订阅
+            LOGGER.info("服务未订阅 [{}]", appName);
             return;
         }
         // 注册Consumer节点
         if (config.isRegister()) {
             try {
                 String consumerPath = buildConsumerPath(rootPath, config);
-//                String url = ZookeeperRegistryHelper.convertConsumerToUrl(config);
-                String url = "";
+                String url = ZookeeperRegistryHelper.convertConsumerToUrl(config);
                 String encodeUrl = URLEncoder.encode(url, "UTF-8");
                 getAndCheckZkClient().create().creatingParentContainersIfNeeded()
                         .withMode(CreateMode.EPHEMERAL) // Consumer临时节点
@@ -312,12 +309,15 @@ public class ZookeeperRegistry extends Registry {
                         switch (event.getType()) {
                             case CHILD_ADDED: //加了一个provider
 //                                providerObserver.addProvider(config, providerPath, event.getData());
+                                LOGGER.info("add a provider [{}]，[{}]", providerPath, event.getData());
                                 break;
                             case CHILD_REMOVED: //删了一个provider
 //                                providerObserver.removeProvider(config, providerPath, event.getData());
+                                LOGGER.info("delete a provider [{}]，[{}]", providerPath, event.getData());
                                 break;
                             case CHILD_UPDATED: // 更新一个Provider
 //                                providerObserver.updateProvider(config, providerPath, event.getData());
+                                LOGGER.info("update a provider [{}]，[{}]", providerPath, event.getData());
                                 break;
                             default:
                                 break;
@@ -410,39 +410,21 @@ public class ZookeeperRegistry extends Registry {
 
     @Override
     public void unSubscribe(ClientConfig config) {
-//        // 反注册服务端节点
-//        if (config.isRegister()) {
-//            try {
-//                String url = consumerUrls.remove(config);
-//                if (url != null) {
-//                    String consumerPath = buildConsumerPath(rootPath, config);
-//                    url = URLEncoder.encode(url, "UTF-8");
-//                    getAndCheckZkClient().delete().forPath(consumerPath + CONTEXT_SEP + url);
-//                }
-//            } catch (Exception e) {
+        // 反注册服务端节点
+        if (config.isRegister()) {
+            try {
+                String url = consumerUrls.remove(config);
+                if (url != null) {
+                    String consumerPath = buildConsumerPath(rootPath, config);
+                    url = URLEncoder.encode(url, "UTF-8");
+                    getAndCheckZkClient().delete().forPath(consumerPath + CONTEXT_SEP + url);
+                }
+            } catch (Exception e) {
 //                if (!RpcRunningState.isShuttingDown()) {
-//                    throw new ChildRpcRuntimeException("Failed to unregister consumer to zookeeperRegistry!", e);
+                throw new ChildRpcRuntimeException("Failed to unregister consumer to zookeeperRegistry!", e);
 //                }
-//            }
-//        }
-//        // 反订阅配置节点
-//        if (config.isSubscribe()) {
-//            try {
-//                providerObserver.removeProviderListener(config);
-//            } catch (Exception e) {
-//                if (!RpcRunningState.isShuttingDown()) {
-//                    throw new ChildRpcRuntimeException("Failed to unsubscribe provider from zookeeperRegistry!", e);
-//                }
-//            }
-//            try {
-//                configObserver.removeConfigListener(config);
-//            } catch (Exception e) {
-//                if (!RpcRunningState.isShuttingDown()) {
-//                    throw new ChildRpcRuntimeException("Failed to unsubscribe consumer config from zookeeperRegistry!",
-//                            e);
-//                }
-//            }
-//        }
+            }
+        }
     }
 
     @Override
@@ -463,21 +445,4 @@ public class ZookeeperRegistry extends Registry {
         }
         return zkClient;
     }
-
-//    /**
-//     * 获取注册配置
-//     *
-//     * @param config  consumer config
-//     * @return
-//     */
-//    private AbstractInterfaceConfig getRegisterConfig(ConsumerConfig config) {
-//        String url = ZookeeperRegistryHelper.convertConsumerToUrl(config);
-//        String addr = url.substring(0, url.indexOf("?"));
-//        for (Map.Entry<ConsumerConfig, String> consumerUrl : consumerUrls.entrySet()) {
-//            if (consumerUrl.getValue().contains(addr)) {
-//                return consumerUrl.getKey();
-//            }
-//        }
-//        return null;
-//    }
 }
