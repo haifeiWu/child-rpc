@@ -3,44 +3,39 @@ package cn.whforever.core.util;
 import cn.whforever.core.config.ClientConfig;
 import cn.whforever.core.config.Config;
 import cn.whforever.core.config.ServerConfig;
+import cn.whforever.core.rpc.RpcConstants;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegistryUtils {
-//
-//    private static final String JAVA = "java";
-//
-//    /**
-//     * Convert provider to url.
-//     *
-//     * @param providerConfig the ProviderConfig
-//     * @return the url list
-//     */
-//    public static List<String> convertProviderToUrls(ProviderConfig providerConfig) {
-//        @SuppressWarnings("unchecked")
-//        List<ServerConfig> servers = providerConfig.getServer();
-//        if (servers != null && !servers.isEmpty()) {
-//            List<String> urls = new ArrayList<String>();
-//            for (ServerConfig server : servers) {
-//                StringBuilder sb = new StringBuilder(200);
-//                String host = server.getVirtualHost(); // 虚拟ip
-//                if (host == null) {
-//                    host = server.getHost();
-//                    if (NetUtils.isLocalHost(host) || NetUtils.isAnyHost(host)) {
-//                        host = SystemInfo.getLocalHost();
-//                    }
-//                }
-//
-//                Map<String, String> metaData = convertProviderToMap(providerConfig, server);
-//                //noinspection unchecked
-//                sb.append(server.getProtocol()).append("://").append(host).append(":")
-//                    .append(server.getPort()).append(server.getContextPath()).append("?version=1.0")
-//                    .append(convertMap2Pair(metaData));
-//                urls.add(sb.toString());
-//            }
-//            return urls;
-//        }
-//        return null;
-//    }
-//
+
+    /**
+     * Convert provider to url.
+     *
+     * @return the url list
+     */
+    public static String convertProviderToUrls(ServerConfig serverConfig) {
+        @SuppressWarnings("unchecked")
+        String url;
+        StringBuilder sb = new StringBuilder();
+        String host = serverConfig.getHost();
+        if (host == null) {
+            host = serverConfig.getHost();
+            if (NetUtils.isLocalHost(host) || NetUtils.isAnyHost(host)) {
+                host = SystemInfo.getLocalHost();
+            }
+        }
+
+        Map<String, String> metaData = convertProviderToMap(serverConfig);
+        //noinspection unchecked
+        sb.append(host).append(":")
+                .append(serverConfig.getPort());
+        url = sb.toString();
+        return url;
+    }
+
+    //
 //    public static List<ProviderInfo> matchProviderInfos(ClientConfig consumerConfig, List<ProviderInfo> providerInfos) {
 //        String protocol = consumerConfig.getProtocol();
 //        List<ProviderInfo> result = new ArrayList<ProviderInfo>();
@@ -54,109 +49,64 @@ public class RegistryUtils {
 //        return result;
 //    }
 //
-//    public static Map<String, String> convertProviderToMap(ProviderConfig providerConfig, ServerConfig server) {
-//        Map<String, String> metaData = new HashMap<String, String>();
-//        metaData.put(RpcConstants.CONFIG_KEY_UNIQUEID, providerConfig.getUniqueId());
-//        metaData.put(RpcConstants.CONFIG_KEY_INTERFACE, providerConfig.getInterfaceId());
-//        metaData.put(RpcConstants.CONFIG_KEY_TIMEOUT, String.valueOf(providerConfig.getTimeout()));
-//        metaData.put(RpcConstants.CONFIG_KEY_DELAY, String.valueOf(providerConfig.getDelay()));
-//        metaData.put(RpcConstants.CONFIG_KEY_ID, providerConfig.getId());
-//        metaData.put(RpcConstants.CONFIG_KEY_DYNAMIC, String.valueOf(providerConfig.isDynamic()));
-//        metaData.put(ProviderInfoAttrs.ATTR_WEIGHT, String.valueOf(providerConfig.getWeight()));
-//        metaData.put(RpcConstants.CONFIG_KEY_ACCEPTS, String.valueOf(server.getAccepts()));
-//        metaData.put(ProviderInfoAttrs.ATTR_START_TIME, String.valueOf(RpcRuntimeContext.now()));
-//        metaData.put(RpcConstants.CONFIG_KEY_APP_NAME, providerConfig.getAppName());
-//        metaData.put(RpcConstants.CONFIG_KEY_SERIALIZATION, providerConfig.getSerialization());
-//        metaData.put(RpcConstants.CONFIG_KEY_PROTOCOL, server.getProtocol());
-//        if (null != providerConfig.getParameters()) {
-//            //noinspection unchecked
-//            metaData.putAll(providerConfig.getParameters());
-//        }
-//
-//        // add common attr
-//        metaData.put(RpcConstants.CONFIG_KEY_LANGUAGE, JAVA);
-//        metaData.put(RpcConstants.CONFIG_KEY_PID, RpcRuntimeContext.PID);
-//        metaData.put(RpcConstants.CONFIG_KEY_RPC_VERSION, String.valueOf(Version.RPC_VERSION));
-//        return metaData;
-//    }
-//
-//    /**
-//     * Convert consumer to url.
-//     *
-//     * @param consumerConfig the ConsumerConfig
-//     * @return the url list
-//     */
-//    public static String convertConsumerToUrl(ConsumerConfig consumerConfig) {
-//        StringBuilder sb = new StringBuilder(200);
-//        String host = SystemInfo.getLocalHost();
-//        //noinspection unchecked
-//        sb.append(consumerConfig.getProtocol()).append("://").append(host).append("?version=1.0")
-//            .append(getKeyPairs(RpcConstants.CONFIG_KEY_UNIQUEID, consumerConfig.getUniqueId()))
-//            .append(getKeyPairs(RpcConstants.CONFIG_KEY_PID, RpcRuntimeContext.PID))
-//            .append(getKeyPairs(RpcConstants.CONFIG_KEY_TIMEOUT, consumerConfig.getTimeout()))
-//            .append(getKeyPairs(RpcConstants.CONFIG_KEY_ID, consumerConfig.getId()))
-//            .append(getKeyPairs(RpcConstants.CONFIG_KEY_GENERIC, consumerConfig.isGeneric()))
-//            .append(getKeyPairs(RpcConstants.CONFIG_KEY_INTERFACE, consumerConfig.getInterfaceId()))
-//            .append(getKeyPairs(RpcConstants.CONFIG_KEY_APP_NAME, consumerConfig.getAppName()))
-//            .append(getKeyPairs(RpcConstants.CONFIG_KEY_SERIALIZATION,
-//                consumerConfig.getSerialization()))
-//            .append(getKeyPairs(ProviderInfoAttrs.ATTR_START_TIME, RpcRuntimeContext.now()))
-//            .append(convertMap2Pair(consumerConfig.getParameters()));
-//        addCommonAttrs(sb);
-//        return sb.toString();
-//    }
-//
-//    /**
-//     * Gets key pairs.
-//     *
-//     * @param key   the key
-//     * @param value the value
-//     * @return the key pairs
-//     */
-//    public static String getKeyPairs(String key, Object value) {
-//        if (value != null) {
-//            return "&" + key + "=" + value.toString();
-//        } else {
-//            return "";
-//        }
-//    }
-//
-//    /**
-//     * 加入一些公共的额外属性
-//     *
-//     * @param sb 属性
-//     */
-//    private static void addCommonAttrs(StringBuilder sb) {
-//        sb.append(getKeyPairs(RpcConstants.CONFIG_KEY_PID, RpcRuntimeContext.PID));
-//        sb.append(getKeyPairs(RpcConstants.CONFIG_KEY_LANGUAGE, JAVA));
-//        sb.append(getKeyPairs(RpcConstants.CONFIG_KEY_RPC_VERSION, Version.RPC_VERSION + ""));
-//    }
-//
-//    /**
-//     * 转换 map to url pair
-//     *
-//     * @param map 属性
-//     */
-//    private static String convertMap2Pair(Map<String, String> map) {
-//
-//        if (CommonUtils.isEmpty(map)) {
-//            return StringUtils.EMPTY;
-//        }
-//
-//        StringBuilder sb = new StringBuilder(128);
-//        for (Map.Entry<String, String> entry : map.entrySet()) {
-//            sb.append(getKeyPairs(entry.getKey(), entry.getValue()));
-//        }
-//
-//        return sb.toString();
-//    }
-//
+    public static Map<String, String> convertProviderToMap(ServerConfig providerConfig) {
+        Map<String, String> metaData = new HashMap<>(16);
+        metaData.put(RpcConstants.CONFIG_KEY_INTERFACE, providerConfig.getInterfaceId());
+        metaData.put(RpcConstants.CONFIG_KEY_PROTOCOL, providerConfig.getProtocol());
+        return metaData;
+    }
+
+    /**
+     * Convert consumer to url.
+     *
+     * @param consumerConfig the ConsumerConfig
+     * @return the url list
+     */
+    public static String convertConsumerToUrl(ClientConfig consumerConfig) {
+        String host = SystemInfo.getLocalHost();
+        return host;
+    }
+
+    /**
+     * Gets key pairs.
+     *
+     * @param key   the key
+     * @param value the value
+     * @return the key pairs
+     */
+    public static String getKeyPairs(String key, Object value) {
+        if (value != null) {
+            return "&" + key + "=" + value.toString();
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * 转换 map to url pair
+     *
+     * @param map 属性
+     */
+    private static String convertMap2Pair(Map<String, String> map) {
+
+        if (CommonUtils.isEmpty(map)) {
+            return StringUtils.EMPTY;
+        }
+
+        StringBuilder sb = new StringBuilder(128);
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            sb.append(getKeyPairs(entry.getKey(), entry.getValue()));
+        }
+
+        return sb.toString();
+    }
+
     public static String buildProviderPath(String rootPath, Config config) {
-        return rootPath + "sofa-rpc/" + config.getInterfaceId() + "/providers";
+        return rootPath + "child-rpc/" + config.getInterfaceId() + "/providers";
     }
 
     public static String buildConsumerPath(String rootPath, Config config) {
-        return rootPath + "sofa-rpc/" + config.getInterfaceId() + "/consumers";
+        return rootPath + "child-rpc/" + config.getInterfaceId() + "/consumers";
     }
 
 //

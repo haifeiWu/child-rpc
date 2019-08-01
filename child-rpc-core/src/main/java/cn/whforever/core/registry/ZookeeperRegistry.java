@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,18 +33,19 @@ import static cn.whforever.core.util.StringUtils.CONTEXT_SEP;
  *  在zookeeper上存放的数据结构为：
  *  -$rootPath (根路径)
  *         └--child-rpc
- *             |--com.alipay.sofa.rpc.example.HelloService （服务）
+ *             |--cn.whforever.rpc.example.HelloService （服务）
  *             |       |-providers （服务提供者列表）
- *             |       |     |--bolt://192.168.1.100:22000?xxx=yyy [1]
- *             |       |     |--bolt://192.168.1.110:22000?xxx=yyy [1]
- *             |       |     └--bolt://192.168.1.120?xxx=yyy [1]
+ *             |       |     |--192.168.1.100:22000
+ *             |       |     |--192.168.1.110:23000
+ *             |       |     └--192.168.1.120:2400
  *             |       |-consumers （服务调用者列表）
- *             |       |     |--bolt://192.168.3.100?xxx=yyy []
- *             |       |     |--bolt://192.168.3.110?xxx=yyy []
- *             |       |     └--bolt://192.168.3.120?xxx=yyy []
- *             |--com.alipay.sofa.rpc.example.EchoService （下一个服务）
+ *             |       |     |--192.168.3.100
+ *             |       |     |--192.168.3.110
+ *             |       |     └--192.168.3.120
+ *             |--cn.whforever.rpc.example.EchoService （下一个服务）
  *             | ......
  *  </pre>
+ *
  * @author wuhf
  * @Date 2018/9/12 16:27
  **/
@@ -117,7 +117,7 @@ public class ZookeeperRegistry extends Registry {
     /**
      * 保存服务发布者的url
      */
-    private Map<ServerConfig, List<String>> providerUrls = new ConcurrentHashMap<>();
+    private Map<ServerConfig, String> providerUrls = new ConcurrentHashMap<>();
 
     /**
      * 保存服务消费者的url
@@ -216,20 +216,22 @@ public class ZookeeperRegistry extends Registry {
             // 注册服务端节点
             try {
 //                List<String> urls = ZookeeperRegistryHelper.convertProviderToUrls(config);
-                List<String> urls = new ArrayList<>();
-                if (CommonUtils.isNotEmpty(urls)) {
+//                List<String> urls = new ArrayList<>();
+                String url = ZookeeperRegistryHelper.convertProviderToUrls(config);
+//                if (CommonUtils.isNotEmpty(urls)) {
+                if (StringUtils.isNotBlank(url)) {
                     String providerPath = buildProviderPath(rootPath, config);
                     // do some logger
-                    for (String url : urls) {
-                        url = URLEncoder.encode(url, "UTF-8");
-                        String providerUrl = providerPath + CONTEXT_SEP + url;
-                        getAndCheckZkClient().create().creatingParentContainersIfNeeded()
-                                .withMode(ephemeralNode ? CreateMode.EPHEMERAL : CreateMode.PERSISTENT) // 是否永久节点
+//                    for (String url : urls) {
+                    url = URLEncoder.encode(url, "UTF-8");
+                    String providerUrl = providerPath + CONTEXT_SEP + url;
+                    getAndCheckZkClient().create().creatingParentContainersIfNeeded()
+                            .withMode(ephemeralNode ? CreateMode.EPHEMERAL : CreateMode.PERSISTENT) // 是否永久节点
 //                                .forPath(providerUrl, config.isDynamic() ? PROVIDER_ONLINE : PROVIDER_OFFLINE); // 是否默认上下线
-                                .forPath(providerUrl, PROVIDER_ONLINE);
-                        // do some log
-                    }
-                    providerUrls.put(config, urls);
+                            .forPath(providerUrl, PROVIDER_ONLINE);
+                    // do some log
+//                    }
+                    providerUrls.put(config, url);
                     // do some log
                 }
             } catch (Exception e) {
@@ -248,38 +250,17 @@ public class ZookeeperRegistry extends Registry {
         // 反注册服务端节点
         if (config.isRegister()) {
             try {
-                List<String> urls = providerUrls.remove(config);
-                if (CommonUtils.isNotEmpty(urls)) {
-                    String providerPath = buildProviderPath(rootPath, config);
-                    for (String url : urls) {
-                        url = URLEncoder.encode(url, "UTF-8");
-                        getAndCheckZkClient().delete().forPath(providerPath + CONTEXT_SEP + url);
-                    }
-
-                    // do some log
-                }
+                String url = providerUrls.remove(config);
+                String providerPath = buildProviderPath(rootPath, config);
+                url = URLEncoder.encode(url, "UTF-8");
+                getAndCheckZkClient().delete().forPath(providerPath + CONTEXT_SEP + url);
+                // do some log
             } catch (Exception e) {
 //                if (!RpcRunningState.isShuttingDown()) {
-                    throw new ChildRpcRuntimeException("Failed to unregister provider to zookeeperRegistry!", e);
+                throw new ChildRpcRuntimeException("Failed to unregister provider to zookeeperRegistry!", e);
 //                }
             }
         }
-        // 反订阅配置节点
-//        if (config.isSubscribe()) {
-//            try {
-//                if (null != configObserver) {
-//                    configObserver.removeConfigListener(config);
-//                }
-//                if (null != overrideObserver) {
-//                    overrideObserver.removeConfigListener(config);
-//                }
-//            } catch (Exception e) {
-//                if (!RpcRunningState.isShuttingDown()) {
-//                    throw new ChildRpcRuntimeException("Failed to unsubscribe provider config from zookeeperRegistry!",
-//                            e);
-//                }
-//            }
-//        }
     }
 
     @Override

@@ -18,4 +18,8 @@ public class RpcConstants {
      */
     public static final String ZOOKEEPER = "ZOOKEEPER";
 
+    public static final String CONFIG_KEY_PID = "pid";
+    public static final String CONFIG_KEY_INTERFACE = "interface";
+    public static final String CONFIG_KEY_PROTOCOL = "protocol";
+
 }

@@ -9,13 +9,12 @@ import cn.whforever.core.serialize.AbstractSerializer;
 public class ServerConfig extends Config {
 
     private int port;
+    private String host;
     private AbstractSerializer serializer;
     /**
      * 接口实现类引用
      */
     protected Object ref;
-
-    private Object interfaceId;
 
     /**
      * 协议
@@ -71,4 +70,12 @@ public class ServerConfig extends Config {
         return this;
     }
 
+    public String getHost() {
+        return host;
+    }
+
+    public ServerConfig setHost(String host) {
+        this.host = host;
+        return this;
+    }
 }

@@ -17,8 +17,8 @@ public class ServerTest {
         ServerConfig serverConfig = new ServerConfig();
         serverConfig.setSerializer(AbstractSerializer.SerializeEnum.HESSIAN.serializer)
                 .setPort(5201)
-                .setInterfaceId(HelloService.class.getName())
-                .setRef(HelloServiceImpl.class.getName());
+                .setRef(HelloServiceImpl.class.getName())
+                .setInterfaceId(HelloService.class.getName());
         ServerProxy serverProxy = new ServerProxy(new NettyServerAbstract(),serverConfig);
         try {
             serverProxy.export();

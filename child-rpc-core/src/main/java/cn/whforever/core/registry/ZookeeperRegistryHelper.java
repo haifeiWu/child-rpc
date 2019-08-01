@@ -16,12 +16,14 @@
  */
 package cn.whforever.core.registry;
 
+import cn.whforever.core.util.RegistryUtils;
+
 /**
  * Helper for ZookeeperRegistry
  *
  * @author <a href=mailto:zhanggeng.zg@antfin.com>GengZhang</a>
  */
-public class ZookeeperRegistryHelper /*extends RegistryUtils*/ {
+public class ZookeeperRegistryHelper extends RegistryUtils {
 
 //    /**
 //     * Convert url to provider list.
