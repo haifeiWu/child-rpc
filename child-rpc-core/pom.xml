@@ -45,7 +45,6 @@
             <artifactId>resteasy-jackson-provider</artifactId>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
@@ -54,7 +53,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.6</version>
         </dependency>
         <dependency>
             <groupId>com.caucho</groupId>
