@@ -283,7 +283,8 @@ public class ZookeeperRegistry extends Registry {
                     String url = ZookeeperRegistryHelper.convertConsumerToUrl(config);
                     String encodeUrl = URLEncoder.encode(url, "UTF-8");
                     getAndCheckZkClient().create().creatingParentContainersIfNeeded()
-                            .withMode(CreateMode.EPHEMERAL) // Consumer临时节点
+                            // Consumer临时节点
+                            .withMode(CreateMode.EPHEMERAL)
                             .forPath(consumerPath + CONTEXT_SEP + encodeUrl);
                     consumerUrls.put(config, url);
                 }
