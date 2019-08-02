@@ -1,4 +1,4 @@
-package cn.whforever.core.registry;
+package cn.whforever.core.registry.zk;
 
 import cn.whforever.core.config.ClientConfig;
 import cn.whforever.core.config.RegistryConfig;

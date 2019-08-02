@@ -2,7 +2,8 @@ package cn.whforever.core.register;
 
 import cn.whforever.core.config.RegistryConfig;
 import cn.whforever.core.exception.ChildRpcRuntimeException;
-import cn.whforever.core.registry.ZookeeperRegistry;
+import cn.whforever.core.registry.consul.ConsulRegistry;
+import cn.whforever.core.registry.zk.ZookeeperRegistry;
 import cn.whforever.core.rpc.RpcConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,7 @@ public class RegistryFactory {
             Registry registry = ALL_REGISTRIES.get(registryConfig);
             if (registry == null) {
                 // TODO 使用SPI的方式生成服务注册
-//                ExtensionClass<Registry> ext = ExtensionLoaderFactory.getExtensionLoader(Registry.class)
+//                ExtensionClass<Registry> ext =ext ExtensionLoaderFactory.getExtensionLoader(Registry.class)
 //                        .getExtensionClass(registryConfig.getProtocol());
 //                if (ext == null) {
 //                    throw ExceptionUtils.buildRuntime("registry.protocol", registryConfig.getProtocol(),
@@ -55,8 +56,16 @@ public class RegistryFactory {
 //                }
 //                registry = ext.getExtInstance(new Class[]{RegistryConfig.class}, new Object[]{registryConfig});
 
+//                ServiceLoader<Registry> services = ServiceLoader.load(Registry.class);
+//                Iterator iterator = services.iterator();
+//                while (iterator.hasNext()) {
+//                    registry = (Registry) iterator.next();
+//                }
+
                 if (RpcConstants.ZOOKEEPER.equalsIgnoreCase(registryConfig.getProtocol())) {
                     registry = new ZookeeperRegistry(registryConfig);
+                } else if (RpcConstants.CONSUL.equalsIgnoreCase(registryConfig.getProtocol())) {
+                    registry = new ConsulRegistry(registryConfig);
                 }
                 ALL_REGISTRIES.put(registryConfig, registry);
             }

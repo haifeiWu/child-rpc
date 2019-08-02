@@ -17,6 +17,7 @@ public class RpcConstants {
      * zookeeper
      */
     public static final String ZOOKEEPER = "ZOOKEEPER";
+    public static final String CONSUL = "CONSUL";
 
     public static final String CONFIG_KEY_PID = "pid";
     public static final String CONFIG_KEY_INTERFACE = "interface";

@@ -1,8 +1,7 @@
 package cn.whforever.example.zookeeper;
 
 import cn.whforever.core.config.RegistryConfig;
-import cn.whforever.core.register.Registry;
-import cn.whforever.core.registry.ZookeeperRegistry;
+import cn.whforever.core.registry.zk.ZookeeperRegistry;
 import cn.whforever.core.rpc.RpcConstants;
 import org.junit.Assert;
 import org.junit.Test;
