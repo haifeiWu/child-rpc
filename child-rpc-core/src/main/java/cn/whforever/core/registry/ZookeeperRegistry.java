@@ -12,8 +12,6 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.imps.CuratorFrameworkState;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
-import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
-import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
@@ -298,33 +296,8 @@ public class ZookeeperRegistry extends Registry {
             try {
                 final String providerPath = buildProviderPath(rootPath, config);
                 // 监听配置节点下 子节点增加、子节点删除、子节点Data修改事件
-                // TODO 换成监听父节点变化（只是监听变化了，而不通知变化了什么，然后客户端自己来拉数据的）
                 PathChildrenCache pathChildrenCache = new PathChildrenCache(zkClient, providerPath, true);
-                pathChildrenCache.getListenable().addListener(new PathChildrenCacheListener() {
-                    @Override
-                    public void childEvent(CuratorFramework client1, PathChildrenCacheEvent event) throws Exception {
-
-                        // do some log
-                        switch (event.getType()) {
-                            case CHILD_ADDED: //加了一个provider
-//                                providerObserver.addProvider(config, providerPath, event.getData());
-                                LOGGER.info("add a provider [{}]，[{}]", providerPath, event.getData());
-                                break;
-                            case CHILD_REMOVED: //删了一个provider
-//                                providerObserver.removeProvider(config, providerPath, event.getData());
-                                LOGGER.info("delete a provider [{}]，[{}]", providerPath, event.getData());
-                                break;
-                            case CHILD_UPDATED: // 更新一个Provider
-//                                providerObserver.updateProvider(config, providerPath, event.getData());
-                                LOGGER.info("update a provider [{}]，[{}]", providerPath, event.getData());
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                });
                 pathChildrenCache.start(PathChildrenCache.StartMode.BUILD_INITIAL_CACHE);
-                // TODO 返回服务列表
                 List<String> providerInfos = ZookeeperRegistryHelper.convertUrlsToProviders(providerPath, pathChildrenCache.getCurrentData());
                 return providerInfos;
             } catch (Exception e) {

@@ -10,6 +10,7 @@ import cn.whforever.core.remote.client.AbstractChildClient;
 import cn.whforever.core.rpc.RpcRequest;
 import cn.whforever.core.rpc.RpcResponse;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -58,6 +59,11 @@ public class ClientProxy<T> implements Proxy {
 
         this.clientConfig = (ClientConfig) config;
         List<String> providerList = registry.subscribe(this.clientConfig);
+
+        if (null == providerList) {
+            throw new ChildRpcRuntimeException("无可用服务供订阅！");
+        }
+
         // 使用随机算法，随机选择一个provider
         int index = ThreadLocalRandom.current().nextInt(providerList.size());
         String providerInfo = providerList.get(index);
