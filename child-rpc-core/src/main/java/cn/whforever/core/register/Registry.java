@@ -73,13 +73,13 @@ public abstract class Registry implements Initializable,Destroyable {
      */
     public abstract void batchUnRegister(List<ServerConfig> configs);
 
-//    /**
-//     * 订阅服务列表
-//     *
-//     * @param config Consumer配置
-//     * @return 当前Provider列表，返回null表示未同步获取到地址
-//     */
-//    public abstract List<ProviderGroup> subscribe(ConsumerConfig config);
+    /**
+     * 订阅服务列表
+     *
+     * @param config Consumer配置
+     * @return 当前Provider列表，返回null表示未同步获取到地址
+     */
+    public abstract List<String> subscribe(ClientConfig config);
 
     /**
      * 反订阅服务调用者相关配置

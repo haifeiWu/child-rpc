@@ -11,9 +11,6 @@ import cn.whforever.core.rpc.RpcInvokerHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author wuhf
  * @Date 2018/9/1 17:21
@@ -36,11 +33,15 @@ public class ServerProxy {
         serverConfig = (ServerConfig) this.config;
     }
 
+    public ServerProxy(AbstractChildServer nettyServerAbstract) {
+        this.childServer = nettyServerAbstract;
+    }
+
     public void export() {
         try {
             Object serviceBean = Class.forName((String) serverConfig.getRef()).newInstance();
-            RpcInvokerHandler.serviceMap.put((String) serverConfig.getInterfaceId(), serviceBean);
-            this.childServer.start(this.config);
+            RpcInvokerHandler.serviceMap.put(serverConfig.getInterfaceId(), serviceBean);
+            this.childServer.start(this.getServerConfig());
 
             if (serverConfig.isRegister()) {
                 // 将服务注册到zookeeper
@@ -63,25 +64,18 @@ public class ServerProxy {
      */
     protected void register() {
         if (serverConfig.isRegister()) {
-//            List<RegistryConfig> registryConfigs = new ArrayList<>();//providerConfig.getRegistry();
-//            if (registryConfigs != null) {
-//                for (RegistryConfig registryConfig : registryConfigs) {
-                    Registry registry = RegistryFactory.getRegistry(this.getRegistryConfig());
-                    registry.init();
-                    registry.start();
-                    try {
-                        registry.register(this.serverConfig);
-                    } catch (ChildRpcRuntimeException e) {
-                        throw e;
-                    } catch (Throwable e) {
-                        String appName = serverConfig.getInterfaceId();
-//                        if (LOGGER.isWarnEnabled(appName)) {
-                        LOGGER.info(appName, "Catch exception when register to registry: "
-                                + registryConfig.getId(), e);
-//                        }
-                    }
-//                }
-//            }
+            Registry registry = RegistryFactory.getRegistry(this.getRegistryConfig());
+            registry.init();
+            registry.start();
+            try {
+                registry.register(this.serverConfig);
+            } catch (ChildRpcRuntimeException e) {
+                throw e;
+            } catch (Throwable e) {
+                String appName = serverConfig.getInterfaceId();
+                LOGGER.info(appName, "Catch exception when register to registry: "
+                        + registryConfig.getId(), e);
+            }
         }
     }
 
@@ -90,22 +84,15 @@ public class ServerProxy {
      */
     protected void unregister() {
         if (serverConfig.isRegister()) {
-//            List<RegistryConfig> registryConfigs = new ArrayList<>();//providerConfig.getRegistry();
-//            if (registryConfigs != null) {
-//                for (RegistryConfig registryConfig : registryConfigs) {
-                    Registry registry = RegistryFactory.getRegistry(this.getRegistryConfig());
-                    try {
-                        registry.unRegister(serverConfig);
-                    } catch (Exception e) {
-                        String appName = serverConfig.getInterfaceId();
-//                        if (LOGGER.isWarnEnabled(appName)) {
-                            LOGGER.info(appName, "Catch exception when unRegister from registry: " +
-                                    registryConfig.getId()
-                                    + ", but you can ignore if it's called by JVM shutdown hook", e);
-//                        }
-                    }
-//                }
-//            }
+            Registry registry = RegistryFactory.getRegistry(this.getRegistryConfig());
+            try {
+                registry.unRegister(serverConfig);
+            } catch (Exception e) {
+                String appName = serverConfig.getInterfaceId();
+                LOGGER.info(appName, "Catch exception when unRegister from registry: " +
+                        registryConfig.getId()
+                        + ", but you can ignore if it's called by JVM shutdown hook", e);
+            }
         }
     }
 

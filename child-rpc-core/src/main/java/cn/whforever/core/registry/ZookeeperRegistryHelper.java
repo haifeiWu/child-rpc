@@ -16,7 +16,15 @@
  */
 package cn.whforever.core.registry;
 
+import cn.whforever.core.config.ServerConfig;
+import cn.whforever.core.util.CommonUtils;
 import cn.whforever.core.util.RegistryUtils;
+import org.apache.curator.framework.recipes.cache.ChildData;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Helper for ZookeeperRegistry
@@ -25,37 +33,35 @@ import cn.whforever.core.util.RegistryUtils;
  */
 public class ZookeeperRegistryHelper extends RegistryUtils {
 
-//    /**
-//     * Convert url to provider list.
-//     *
-//     * @param providerPath
-//     * @param currentData  the current data
-//     * @return the list
-//     * @throws UnsupportedEncodingException decode exception
-//     */
-//    static List<ServerConfig> convertUrlsToProviders(String providerPath,
-//                                                     List<ChildData> currentData) throws UnsupportedEncodingException {
-//        List<ProviderInfo> providerInfos = new ArrayList<ProviderInfo>();
-//        if (CommonUtils.isEmpty(currentData)) {
-//            return providerInfos;
-//        }
-//
-//        for (ChildData childData : currentData) {
-//            providerInfos.add(convertUrlToProvider(providerPath, childData));
-//        }
-//        return providerInfos;
-//    }
+    /**
+     * Convert url to provider list.
+     *
+     * @param providerPath
+     * @param currentData  the current data
+     * @return the list
+     * @throws UnsupportedEncodingException decode exception
+     */
+    static List<String> convertUrlsToProviders(String providerPath,
+                                                     List<ChildData> currentData) throws UnsupportedEncodingException {
+        List<String> providerInfos = new ArrayList<>();
 
-//    static ProviderInfo convertUrlToProvider(String providerPath,
-//                                             ChildData childData) throws UnsupportedEncodingException {
-//        String url = childData.getPath().substring(providerPath.length() + 1); // 去掉头部
-//        url = URLDecoder.decode(url, "UTF-8");
-//        ProviderInfo providerInfo = ProviderHelper.toProviderInfo(url);
-//
-//        processWarmUpWeight(providerInfo);
-//
-//        return providerInfo;
-//    }
+        if (CommonUtils.isEmpty(currentData)) {
+            return providerInfos;
+        }
+
+        for (ChildData childData : currentData) {
+            providerInfos.add(convertUrlToProvider(providerPath, childData));
+        }
+        return providerInfos;
+    }
+
+    static String convertUrlToProvider(String providerPath,
+                                             ChildData childData) throws UnsupportedEncodingException {
+        String url = childData.getPath();
+        url = URLDecoder.decode(url, "UTF-8");
+        url = url.replace(providerPath + "/","");
+        return url;
+    }
 
 //    /**
 //     * Convert child data to attribute list.

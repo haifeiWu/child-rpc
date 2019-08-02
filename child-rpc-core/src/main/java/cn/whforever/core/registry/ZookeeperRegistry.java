@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -268,23 +269,26 @@ public class ZookeeperRegistry extends Registry {
         }
     }
 
-    public void subscribe(final ClientConfig config) {
-        String appName = (String) config.getInterfaceId();
+    @Override
+    public List<String> subscribe(final ClientConfig config) {
+        String appName = config.getInterfaceId();
         if (!registryConfig.isSubscribe()) {
             // 注册中心不订阅
             LOGGER.info("服务未订阅 [{}]", appName);
-            return;
+            return new ArrayList<>();
         }
         // 注册Consumer节点
         if (config.isRegister()) {
             try {
-                String consumerPath = buildConsumerPath(rootPath, config);
-                String url = ZookeeperRegistryHelper.convertConsumerToUrl(config);
-                String encodeUrl = URLEncoder.encode(url, "UTF-8");
-                getAndCheckZkClient().create().creatingParentContainersIfNeeded()
-                        .withMode(CreateMode.EPHEMERAL) // Consumer临时节点
-                        .forPath(consumerPath + CONTEXT_SEP + encodeUrl);
-                consumerUrls.put(config, url);
+                if (StringUtils.isBlank(consumerUrls.get(config))) {
+                    String consumerPath = buildConsumerPath(rootPath, config);
+                    String url = ZookeeperRegistryHelper.convertConsumerToUrl(config);
+                    String encodeUrl = URLEncoder.encode(url, "UTF-8");
+                    getAndCheckZkClient().create().creatingParentContainersIfNeeded()
+                            .withMode(CreateMode.EPHEMERAL) // Consumer临时节点
+                            .forPath(consumerPath + CONTEXT_SEP + encodeUrl);
+                    consumerUrls.put(config, url);
+                }
             } catch (Exception e) {
                 throw new ChildRpcRuntimeException("Failed to register consumer to zookeeperRegistry!", e);
             }
@@ -292,13 +296,8 @@ public class ZookeeperRegistry extends Registry {
         if (config.isSubscribe()) {
             // 订阅Providers节点
             try {
-//                if (providerObserver == null) { // 初始化
-//                    providerObserver = new ZookeeperProviderObserver();
-//                }
                 final String providerPath = buildProviderPath(rootPath, config);
                 // 监听配置节点下 子节点增加、子节点删除、子节点Data修改事件
-//                ProviderInfoListener providerInfoListener = config.getProviderInfoListener();
-//                providerObserver.addProviderListener(config, providerInfoListener);
                 // TODO 换成监听父节点变化（只是监听变化了，而不通知变化了什么，然后客户端自己来拉数据的）
                 PathChildrenCache pathChildrenCache = new PathChildrenCache(zkClient, providerPath, true);
                 pathChildrenCache.getListenable().addListener(new PathChildrenCacheListener() {
@@ -325,88 +324,15 @@ public class ZookeeperRegistry extends Registry {
                     }
                 });
                 pathChildrenCache.start(PathChildrenCache.StartMode.BUILD_INITIAL_CACHE);
-//                List<ProviderInfo> providerInfos = ZookeeperRegistryHelper.convertUrlsToProviders(
-//                        providerPath, pathChildrenCache.getCurrentData());
-//                List<ProviderInfo> matchProviders = ZookeeperRegistryHelper.matchProviderInfos(config, providerInfos);
-//                return Collections.singletonList(new ProviderGroup().addAll(matchProviders));
+                // TODO 返回服务列表
+                List<String> providerInfos = ZookeeperRegistryHelper.convertUrlsToProviders(providerPath, pathChildrenCache.getCurrentData());
+                return providerInfos;
             } catch (Exception e) {
                 throw new ChildRpcRuntimeException("Failed to subscribe provider from zookeeperRegistry!", e);
             }
         }
+        return null;
     }
-
-//    @Override
-//    public List<ProviderGroup> subscribe(final ConsumerConfig config) {
-//        String appName = config.getAppName();
-//        if (!registryConfig.isSubscribe()) {
-//            // 注册中心不订阅
-//            if (LOGGER.isInfoEnabled(appName)) {
-//                LOGGER.infoWithApp(appName, LogCodes.getLog(LogCodes.INFO_REGISTRY_IGNORE));
-//            }
-//            return null;
-//        }
-//        // 注册Consumer节点
-//        if (config.isRegister()) {
-//            try {
-//                String consumerPath = buildConsumerPath(rootPath, config);
-//                String url = ZookeeperRegistryHelper.convertConsumerToUrl(config);
-//                String encodeUrl = URLEncoder.encode(url, "UTF-8");
-//                getAndCheckZkClient().create().creatingParentContainersIfNeeded()
-//                        .withMode(CreateMode.EPHEMERAL) // Consumer临时节点
-//                        .forPath(consumerPath + CONTEXT_SEP + encodeUrl);
-//                consumerUrls.put(config, url);
-//            } catch (Exception e) {
-//                throw new ChildRpcRuntimeException("Failed to register consumer to zookeeperRegistry!", e);
-//            }
-//        }
-//        if (config.isSubscribe()) {
-//            // 订阅Providers节点
-//            try {
-//                if (providerObserver == null) { // 初始化
-//                    providerObserver = new ZookeeperProviderObserver();
-//                }
-//                final String providerPath = buildProviderPath(rootPath, config);
-//                if (LOGGER.isInfoEnabled(appName)) {
-//                    LOGGER.infoWithApp(appName, LogCodes.getLog(LogCodes.INFO_ROUTE_REGISTRY_SUB, providerPath));
-//                }
-//                // 监听配置节点下 子节点增加、子节点删除、子节点Data修改事件
-//                ProviderInfoListener providerInfoListener = config.getProviderInfoListener();
-//                providerObserver.addProviderListener(config, providerInfoListener);
-//                // TODO 换成监听父节点变化（只是监听变化了，而不通知变化了什么，然后客户端自己来拉数据的）
-//                PathChildrenCache pathChildrenCache = new PathChildrenCache(zkClient, providerPath, true);
-//                pathChildrenCache.getListenable().addListener(new PathChildrenCacheListener() {
-//                    @Override
-//                    public void childEvent(CuratorFramework client1, PathChildrenCacheEvent event) throws Exception {
-//                        if (LOGGER.isDebugEnabled(config.getAppName())) {
-//                            LOGGER.debugWithApp(config.getAppName(),
-//                                    "Receive zookeeper event: " + "type=[" + event.getType() + "]");
-//                        }
-//                        switch (event.getType()) {
-//                            case CHILD_ADDED: //加了一个provider
-//                                providerObserver.addProvider(config, providerPath, event.getData());
-//                                break;
-//                            case CHILD_REMOVED: //删了一个provider
-//                                providerObserver.removeProvider(config, providerPath, event.getData());
-//                                break;
-//                            case CHILD_UPDATED: // 更新一个Provider
-//                                providerObserver.updateProvider(config, providerPath, event.getData());
-//                                break;
-//                            default:
-//                                break;
-//                        }
-//                    }
-//                });
-//                pathChildrenCache.start(PathChildrenCache.StartMode.BUILD_INITIAL_CACHE);
-//                List<ProviderInfo> providerInfos = ZookeeperRegistryHelper.convertUrlsToProviders(
-//                        providerPath, pathChildrenCache.getCurrentData());
-//                List<ProviderInfo> matchProviders = ZookeeperRegistryHelper.matchProviderInfos(config, providerInfos);
-//                return Collections.singletonList(new ProviderGroup().addAll(matchProviders));
-//            } catch (Exception e) {
-//                throw new ChildRpcRuntimeException("Failed to subscribe provider from zookeeperRegistry!", e);
-//            }
-//        }
-//        return null;
-//    }
 
     @Override
     public void unSubscribe(ClientConfig config) {

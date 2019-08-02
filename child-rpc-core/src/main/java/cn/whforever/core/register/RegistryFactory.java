@@ -18,10 +18,10 @@ package cn.whforever.core.register;
 
 import cn.whforever.core.config.RegistryConfig;
 import cn.whforever.core.exception.ChildRpcRuntimeException;
-import cn.whforever.core.log.Logger;
-import cn.whforever.core.log.LoggerFactory;
-import cn.whforever.core.rpc.RpcConstants;
 import cn.whforever.core.registry.ZookeeperRegistry;
+import cn.whforever.core.rpc.RpcConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +44,7 @@ public class RegistryFactory {
     /**
      * slf4j Logger for this class
      */
-    private final static Logger LOGGER = LoggerFactory
-            .getLogger(RegistryFactory.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(RegistryFactory.class);
 
     /**
      * 得到注册中心对象

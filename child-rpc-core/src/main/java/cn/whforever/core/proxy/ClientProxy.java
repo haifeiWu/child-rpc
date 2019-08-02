@@ -1,5 +1,6 @@
 package cn.whforever.core.proxy;
 
+import cn.whforever.core.config.ClientConfig;
 import cn.whforever.core.config.Config;
 import cn.whforever.core.config.RegistryConfig;
 import cn.whforever.core.exception.ChildRpcRuntimeException;
@@ -9,7 +10,9 @@ import cn.whforever.core.remote.client.AbstractChildClient;
 import cn.whforever.core.rpc.RpcRequest;
 import cn.whforever.core.rpc.RpcResponse;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author wuhf
@@ -18,12 +21,14 @@ import java.util.UUID;
 public class ClientProxy<T> implements Proxy {
     private AbstractChildClient childClient;
     private Config config;
+    private ClientConfig clientConfig;
     private Class<T> iface;
     private RegistryConfig registryConfig;
 
     public ClientProxy(Config config, AbstractChildClient childClient, Class<T> iface) {
         this.childClient = childClient;
         this.config = config;
+        this.config.setInterfaceId(iface.getName());
         this.iface = iface;
     }
 
@@ -32,12 +37,15 @@ public class ClientProxy<T> implements Proxy {
             if (config.isSubscribe()) {
                 subscribe();
             }
-            childClient.init(this.config);
+            childClient.init(this.clientConfig);
             return invoke();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void unRef() {
     }
 
     /**
@@ -48,7 +56,19 @@ public class ClientProxy<T> implements Proxy {
         registry.init();
         registry.start();
 
+        this.clientConfig = (ClientConfig) config;
+        List<String> providerList = registry.subscribe(this.clientConfig);
         // 使用随机算法，随机选择一个provider
+        int index = ThreadLocalRandom.current().nextInt(providerList.size());
+        String providerInfo = providerList.get(index);
+        String[] providerArr = providerInfo.split(":");
+        clientConfig = (ClientConfig) this.config;
+        clientConfig.setHost(providerArr[0]);
+        clientConfig.setPort(Integer.parseInt(providerArr[1]));
+    }
+
+    private void unSubscribe() {
+
     }
 
     public T invoke() {
@@ -89,4 +109,6 @@ public class ClientProxy<T> implements Proxy {
         this.registryConfig = registryConfig;
         return this;
     }
+
+
 }
