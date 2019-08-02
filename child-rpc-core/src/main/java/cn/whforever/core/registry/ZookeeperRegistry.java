@@ -252,9 +252,7 @@ public class ZookeeperRegistry extends Registry {
                 getAndCheckZkClient().delete().forPath(providerPath + CONTEXT_SEP + url);
                 // do some log
             } catch (Exception e) {
-//                if (!RpcRunningState.isShuttingDown()) {
                 throw new ChildRpcRuntimeException("Failed to unregister provider to zookeeperRegistry!", e);
-//                }
             }
         }
     }
