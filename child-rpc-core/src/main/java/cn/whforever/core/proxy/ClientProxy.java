@@ -73,9 +73,9 @@ public class ClientProxy<T> implements Proxy {
         clientConfig.setPort(Integer.parseInt(providerArr[1]));
     }
 
-    private void unSubscribe() {
-
-    }
+//    private void unSubscribe() {
+//
+//    }
 
     public T invoke() {
         return (T) java.lang.reflect.Proxy.newProxyInstance(Thread.currentThread()
