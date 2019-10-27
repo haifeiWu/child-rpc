@@ -1,6 +1,11 @@
 language: java
 
-script: "mvn cobertura:cobertura -DskipTests"
+jdk:
+  - oraclejdk8
+install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true
+
+#script: mvn test
+script: mvn cobertura:cobertura -DskipTests
 
 after_success:
   - bash <(curl -s https://codecov.io/bash) -t e0747db2-51ac-4ae4-a030-d51f6afeb576
