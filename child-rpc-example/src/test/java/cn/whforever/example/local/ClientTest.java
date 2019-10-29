@@ -4,7 +4,7 @@ import cn.whforever.core.config.ClientConfig;
 import cn.whforever.core.protocol.netty.client.NettyClientAbstract;
 import cn.whforever.core.proxy.ClientProxy;
 import cn.whforever.core.rpc.RpcConstants;
-import cn.whforever.core.serialize.AbstractSerializer;
+import cn.whforever.core.serialize.Serializer;
 import cn.whforever.example.service.HelloService;
 
 /**
@@ -19,8 +19,9 @@ public class ClientTest {
                 .setPort(5201)
                 .setProtocol(RpcConstants.DIRECT_CONN)
                 .setTimeoutMillis(100000)
-                .setSerializer(AbstractSerializer.SerializeEnum.HESSIAN.serializer)
-                .setRegister(false);
+                .setSerializer(Serializer.SerializeEnum.HESSIAN.serializer)
+                .setRegister(false)
+                .setSubscribe(false);
         ClientProxy<HelloService> clientProxy = new ClientProxy(clientConfig, new NettyClientAbstract(), HelloService.class);
         for (int i = 0; i < 10; i++) {
             HelloService helloService = clientProxy.refer();

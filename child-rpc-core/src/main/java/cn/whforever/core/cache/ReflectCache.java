@@ -41,6 +41,29 @@ public final class ReflectCache {
      * 服务对应的ClassLoader
      */
     static final ConcurrentMap<String, ClassLoader> SERVICE_CLASSLOADER_MAP = new ConcurrentHashMap<String, ClassLoader>();
+    /**
+     * String-->Class 缓存
+     */
+    static final ConcurrentMap<String, Class> CLASS_CACHE = new ConcurrentHashMap<String, Class>();
+    /**
+     * Class-->String 缓存
+     */
+    static final ConcurrentMap<Class, String> TYPE_STR_CACHE = new ConcurrentHashMap<Class, String>();
+    /**
+     * 不支持重载的方法对象缓存 {service:{方法名:Method}}
+     */
+    static final ConcurrentMap<String, ConcurrentHashMap<String, Method>> NOT_OVERLOAD_METHOD_CACHE = new ConcurrentHashMap<String, ConcurrentHashMap<String, Method>>();
+    /**
+     * 不支持重载的方法对象参数签名缓存 {service:{方法名:对象参数签名}}
+     */
+    static final ConcurrentMap<String, ConcurrentHashMap<String, String[]>> NOT_OVERLOAD_METHOD_SIGS_CACHE = new ConcurrentHashMap<String, ConcurrentHashMap<String, String[]>>();
+
+    /*----------- Class Cache ------------*/
+    /**
+     * 方法对象缓存 {service:{方法名#(参数列表):Method}} <br>
+     * 用于缓存参数列表，不是按接口，是按ServiceUniqueName
+     */
+    final static ConcurrentMap<String, ConcurrentHashMap<String, Method>> OVERLOAD_METHOD_CACHE = new ConcurrentHashMap<String, ConcurrentHashMap<String, Method>>();
 
     /**
      * 注册服务所在的ClassLoader
@@ -92,17 +115,6 @@ public final class ReflectCache {
         }
     }
 
-    /*----------- Class Cache ------------*/
-    /**
-     * String-->Class 缓存
-     */
-    static final ConcurrentMap<String, Class> CLASS_CACHE    = new ConcurrentHashMap<String, Class>();
-
-    /**
-     * Class-->String 缓存
-     */
-    static final ConcurrentMap<Class, String> TYPE_STR_CACHE = new ConcurrentHashMap<Class, String>();
-
     /**
      * 放入Class缓存
      *
@@ -112,6 +124,8 @@ public final class ReflectCache {
     public static void putClassCache(String typeStr, Class clazz) {
         CLASS_CACHE.put(typeStr, clazz);
     }
+
+    /*----------- Method Cache NOT support overload ------------*/
 
     /**
      * 得到Class缓存
@@ -142,18 +156,6 @@ public final class ReflectCache {
     public static String getTypeStrCache(Class clazz) {
         return TYPE_STR_CACHE.get(clazz);
     }
-
-    /*----------- Method Cache NOT support overload ------------*/
-
-    /**
-     * 不支持重载的方法对象缓存 {service:{方法名:Method}}
-     */
-    static final ConcurrentMap<String, ConcurrentHashMap<String, Method>>   NOT_OVERLOAD_METHOD_CACHE      = new ConcurrentHashMap<String, ConcurrentHashMap<String, Method>>();
-
-    /**
-     * 不支持重载的方法对象参数签名缓存 {service:{方法名:对象参数签名}}
-     */
-    static final ConcurrentMap<String, ConcurrentHashMap<String, String[]>> NOT_OVERLOAD_METHOD_SIGS_CACHE = new ConcurrentHashMap<String, ConcurrentHashMap<String, String[]>>();
 
     /**
      * 往缓存里放入方法
@@ -206,7 +208,7 @@ public final class ReflectCache {
         if (cacheSigs == null) {
             cacheSigs = new ConcurrentHashMap<String, String[]>();
             ConcurrentHashMap<String, String[]> old = NOT_OVERLOAD_METHOD_SIGS_CACHE
-                .putIfAbsent(serviceName, cacheSigs);
+                    .putIfAbsent(serviceName, cacheSigs);
             if (old != null) {
                 cacheSigs = old;
             }
@@ -226,6 +228,8 @@ public final class ReflectCache {
         return methods == null ? null : methods.get(methodName);
     }
 
+    /*----------- Method Cache support overload ------------*/
+
     /**
      * 根据服务名使方法缓存失效
      *
@@ -234,14 +238,6 @@ public final class ReflectCache {
     public static void invalidateMethodSigsCache(String serviceName) {
         NOT_OVERLOAD_METHOD_SIGS_CACHE.remove(serviceName);
     }
-
-    /*----------- Method Cache support overload ------------*/
-
-    /**
-     * 方法对象缓存 {service:{方法名#(参数列表):Method}} <br>
-     * 用于缓存参数列表，不是按接口，是按ServiceUniqueName
-     */
-    final static ConcurrentMap<String, ConcurrentHashMap<String, Method>> OVERLOAD_METHOD_CACHE = new ConcurrentHashMap<String, ConcurrentHashMap<String, Method>>();
 
     /**
      * 往缓存里放入方法
@@ -297,6 +293,7 @@ public final class ReflectCache {
     }
 
     /*----------- Cache Management ------------*/
+
     /**
      * 清理方法
      */

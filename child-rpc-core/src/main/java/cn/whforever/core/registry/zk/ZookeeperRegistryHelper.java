@@ -16,7 +16,6 @@
  */
 package cn.whforever.core.registry.zk;
 
-import cn.whforever.core.config.ServerConfig;
 import cn.whforever.core.util.CommonUtils;
 import cn.whforever.core.util.RegistryUtils;
 import org.apache.curator.framework.recipes.cache.ChildData;
@@ -42,7 +41,7 @@ public class ZookeeperRegistryHelper extends RegistryUtils {
      * @throws UnsupportedEncodingException decode exception
      */
     static List<String> convertUrlsToProviders(String providerPath,
-                                                     List<ChildData> currentData) throws UnsupportedEncodingException {
+                                               List<ChildData> currentData) throws UnsupportedEncodingException {
         List<String> providerInfos = new ArrayList<>();
 
         if (CommonUtils.isEmpty(currentData)) {
@@ -56,10 +55,10 @@ public class ZookeeperRegistryHelper extends RegistryUtils {
     }
 
     static String convertUrlToProvider(String providerPath,
-                                             ChildData childData) throws UnsupportedEncodingException {
+                                       ChildData childData) throws UnsupportedEncodingException {
         String url = childData.getPath();
         url = URLDecoder.decode(url, "UTF-8");
-        url = url.replace(providerPath + "/","");
+        url = url.replace(providerPath + "/", "");
         return url;
     }
 

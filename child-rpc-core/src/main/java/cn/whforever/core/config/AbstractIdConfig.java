@@ -27,21 +27,21 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public abstract class AbstractIdConfig<S extends AbstractIdConfig> implements Serializable {
 
-    private static final long          serialVersionUID = -1932911135229369183L;
+    private static final long serialVersionUID = -1932911135229369183L;
 
     /**
      * Id生成器
      */
-    private final static AtomicInteger ID_GENERATOR     = new AtomicInteger(0);
+    private final static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
 
 //    static {
 //        RpcRuntimeContext.now();
 //    }
 
     /**
-     * config id 
+     * config id
      */
-    private String                     id;
+    private String id;
 
     /**
      * Gets id.

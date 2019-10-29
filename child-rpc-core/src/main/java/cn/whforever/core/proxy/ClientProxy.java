@@ -10,7 +10,6 @@ import cn.whforever.core.remote.client.AbstractChildClient;
 import cn.whforever.core.rpc.RpcRequest;
 import cn.whforever.core.rpc.RpcResponse;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -35,7 +34,8 @@ public class ClientProxy<T> implements Proxy {
 
     public T refer() {
         try {
-            if (config.isSubscribe()) {
+            this.clientConfig = (ClientConfig) config;
+            if (clientConfig.isSubscribe()) {
                 subscribe();
             }
             childClient.init(this.clientConfig);
@@ -57,7 +57,6 @@ public class ClientProxy<T> implements Proxy {
         registry.init();
         registry.start();
 
-        this.clientConfig = (ClientConfig) config;
         List<String> providerList = registry.subscribe(this.clientConfig);
 
         if (null == providerList) {

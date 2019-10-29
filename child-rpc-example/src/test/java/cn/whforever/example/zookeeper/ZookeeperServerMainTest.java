@@ -5,7 +5,7 @@ import cn.whforever.core.config.ServerConfig;
 import cn.whforever.core.protocol.netty.server.NettyServerAbstract;
 import cn.whforever.core.proxy.ServerProxy;
 import cn.whforever.core.rpc.RpcConstants;
-import cn.whforever.core.serialize.AbstractSerializer;
+import cn.whforever.core.serialize.Serializer;
 import cn.whforever.example.service.HelloService;
 import cn.whforever.example.service.impl.HelloServiceImpl;
 
@@ -16,7 +16,7 @@ public class ZookeeperServerMainTest {
 
     public static void main(String[] args) {
         ServerConfig serverConfig = new ServerConfig();
-        serverConfig.setSerializer(AbstractSerializer.SerializeEnum.HESSIAN.serializer)
+        serverConfig.setSerializer(Serializer.SerializeEnum.HESSIAN.serializer)
                 .setHost("172.16.30.114")
                 .setPort(5201)
                 .setRef(HelloServiceImpl.class.getName())
@@ -32,7 +32,7 @@ public class ZookeeperServerMainTest {
                 .setRegistryConfig(registryConfig);
         try {
             serverProxy.export();
-            while (true){
+            while (true) {
 
             }
         } catch (Exception e) {

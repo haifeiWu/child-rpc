@@ -30,7 +30,7 @@ public interface Destroyable {
 
     /**
      * Do destroy with hook.
-     * 
+     *
      * @param hook DestroyHook
      */
     void destroy(DestroyHook hook);

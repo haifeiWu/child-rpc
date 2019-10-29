@@ -7,17 +7,17 @@ public abstract class Config {
     /**
      * 是否注册，如果是false只订阅不注册
      */
-    protected boolean                                register         = true;
+    protected boolean register = true;
 
     /**
      * 是否订阅服务
      */
-    protected boolean                                subscribe        = true;
+    protected boolean subscribe = true;
 
     /**
      * 服务接口：做为服务唯一标识的组成部分<br>
      */
-    protected String                                 interfaceId;
+    protected String interfaceId;
 
     public String getInterfaceId() {
         return interfaceId;

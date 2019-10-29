@@ -20,6 +20,6 @@ public class ZkRegistryTest {
         ZookeeperRegistry registry = new ZookeeperRegistry(registryConfig);
         registry.init();
         boolean started = registry.start();
-        Assert.assertEquals(true,started);
+        Assert.assertEquals(true, started);
     }
 }

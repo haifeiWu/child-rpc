@@ -162,7 +162,7 @@ public class BeanUtils {
         List<String> ignoreFiledList = Arrays.asList(ignoreFields);
         for (Method dstMethod : methods) { // 遍历目标对象的方法
             if (Modifier.isStatic(dstMethod.getModifiers())
-                || !ReflectUtils.isBeanPropertyReadMethod(dstMethod)) {
+                    || !ReflectUtils.isBeanPropertyReadMethod(dstMethod)) {
                 // 不是static方法， 是getter方法
                 continue;
             }
@@ -199,7 +199,7 @@ public class BeanUtils {
      * @param dst          修改后对象
      * @param ignoreFields 忽略的字段
      * @param <T>          对象
-     * @return             修改过的字段列表
+     * @return 修改过的字段列表
      */
     public static <T> List<String> getModifiedFields(T src, T dst, String... ignoreFields) {
         Class clazz = src.getClass();
@@ -208,7 +208,7 @@ public class BeanUtils {
         List<String> modifiedFields = new ArrayList<String>();
         for (Method getterMethod : methods) { // 遍历目标对象的方法
             if (Modifier.isStatic(getterMethod.getModifiers())
-                || !ReflectUtils.isBeanPropertyReadMethod(getterMethod)) {
+                    || !ReflectUtils.isBeanPropertyReadMethod(getterMethod)) {
                 // 不是static方法， 是getter方法
                 continue;
             }

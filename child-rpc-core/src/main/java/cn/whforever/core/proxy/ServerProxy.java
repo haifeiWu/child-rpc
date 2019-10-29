@@ -17,14 +17,12 @@ import org.slf4j.LoggerFactory;
  **/
 public class ServerProxy {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(ServerProxy.class);
+    protected transient volatile boolean exported;
     private AbstractChildServer childServer;
     private Config config;
     private ServerConfig serverConfig;
     private RegistryConfig registryConfig;
-
-    protected transient volatile boolean exported;
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(ServerProxy.class);
 
 
     public ServerProxy(AbstractChildServer childServer, Config config) {

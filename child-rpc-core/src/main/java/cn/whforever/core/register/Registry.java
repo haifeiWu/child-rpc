@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author wuhaifei
  */
-public abstract class Registry implements Initializable,Destroyable {
+public abstract class Registry implements Initializable, Destroyable {
 
     /**
      * 注册中心服务配置

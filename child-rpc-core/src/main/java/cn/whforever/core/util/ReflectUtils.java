@@ -49,14 +49,14 @@ public class ReflectUtils {
 
     private static boolean isPrimitiveType(Class<?> clazz) {
         return clazz.isPrimitive() // 基本类型
-            // 基本类型的对象
-            ||
-            Boolean.class == clazz
-            || Character.class == clazz
-            || Number.class.isAssignableFrom(clazz)
-            // string 或者 date
-            || String.class == clazz
-            || Date.class.isAssignableFrom(clazz);
+                // 基本类型的对象
+                ||
+                Boolean.class == clazz
+                || Character.class == clazz
+                || Number.class.isAssignableFrom(clazz)
+                // string 或者 date
+                || String.class == clazz
+                || Date.class.isAssignableFrom(clazz);
     }
 
     /**
@@ -158,25 +158,25 @@ public class ReflectUtils {
 
     protected static boolean isBeanPropertyReadMethod(Method method) {
         return method != null
-            && Modifier.isPublic(method.getModifiers())
-            && !Modifier.isStatic(method.getModifiers())
-            && method.getReturnType() != void.class
-            && method.getDeclaringClass() != Object.class
-            && method.getParameterTypes().length == 0
-            && (method.getName().startsWith("get") || method.getName().startsWith("is"))
-            // 排除就叫get和is的方法
-            && (!"get".equals(method.getName()) && !"is".equals(method.getName()));
+                && Modifier.isPublic(method.getModifiers())
+                && !Modifier.isStatic(method.getModifiers())
+                && method.getReturnType() != void.class
+                && method.getDeclaringClass() != Object.class
+                && method.getParameterTypes().length == 0
+                && (method.getName().startsWith("get") || method.getName().startsWith("is"))
+                // 排除就叫get和is的方法
+                && (!"get".equals(method.getName()) && !"is".equals(method.getName()));
     }
 
     protected static String getPropertyNameFromBeanReadMethod(Method method) {
         if (isBeanPropertyReadMethod(method)) {
             if (method.getName().startsWith("get")) {
                 return method.getName().substring(3, 4).toLowerCase()
-                    + method.getName().substring(4);
+                        + method.getName().substring(4);
             }
             if (method.getName().startsWith("is")) {
                 return method.getName().substring(2, 3).toLowerCase()
-                    + method.getName().substring(3);
+                        + method.getName().substring(3);
             }
         }
         return null;
@@ -184,19 +184,19 @@ public class ReflectUtils {
 
     protected static boolean isBeanPropertyWriteMethod(Method method) {
         return method != null
-            && Modifier.isPublic(method.getModifiers())
-            && !Modifier.isStatic(method.getModifiers())
-            && method.getDeclaringClass() != Object.class
-            && method.getParameterTypes().length == 1
-            && method.getName().startsWith("set")
-            // 排除就叫set的方法
-            && !"set".equals(method.getName());
+                && Modifier.isPublic(method.getModifiers())
+                && !Modifier.isStatic(method.getModifiers())
+                && method.getDeclaringClass() != Object.class
+                && method.getParameterTypes().length == 1
+                && method.getName().startsWith("set")
+                // 排除就叫set的方法
+                && !"set".equals(method.getName());
     }
 
     protected static boolean isPublicInstanceField(Field field) {
         return Modifier.isPublic(field.getModifiers())
-            && !Modifier.isStatic(field.getModifiers())
-            && !Modifier.isFinal(field.getModifiers())
-            && !field.isSynthetic();
+                && !Modifier.isStatic(field.getModifiers())
+                && !Modifier.isFinal(field.getModifiers())
+                && !field.isSynthetic();
     }
 }

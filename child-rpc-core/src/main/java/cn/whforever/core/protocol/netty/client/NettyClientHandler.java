@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author wuhf
  */
-public class NettyClientHandler extends SimpleChannelInboundHandler<RpcResponse>{
+public class NettyClientHandler extends SimpleChannelInboundHandler<RpcResponse> {
     private static final Logger logger = LoggerFactory.getLogger(NettyClientHandler.class);
 
     @Override

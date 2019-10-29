@@ -14,26 +14,23 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class RpcRuntimeContext {
     /**
-     * slf4j Logger for this class
-     */
-    private final static Logger LOGGER = LoggerFactory.getLogger(RpcRuntimeContext.class);
-
-    /**
-     * 上下文信息，例如instancekey，本机ip等信息
-     */
-    private final static ConcurrentHashMap CONTEXT = new ConcurrentHashMap();
-
-    /**
      * 当前进程Id
      */
     public static final String PID = ManagementFactory
             .getRuntimeMXBean()
             .getName().split("@")[0];
-
     /**
      * 当前应用启动时间（用这个类加载时间为准）
      */
     public static final long START_TIME = now();
+    /**
+     * slf4j Logger for this class
+     */
+    private final static Logger LOGGER = LoggerFactory.getLogger(RpcRuntimeContext.class);
+    /**
+     * 上下文信息，例如instancekey，本机ip等信息
+     */
+    private final static ConcurrentHashMap CONTEXT = new ConcurrentHashMap();
 
     /**
      * 发布的服务配置

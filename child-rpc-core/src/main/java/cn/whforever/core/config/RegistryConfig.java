@@ -29,72 +29,59 @@ public class RegistryConfig extends AbstractIdConfig implements Serializable {
     /**
      * The constant serialVersionUID.
      */
-    private static final long     serialVersionUID = -2921019924557602234L;
-
-    /**
-     * 协议
-     */
-    private String                protocol         = "";
-
-    /**
-     * 指定注册中心的地址, 和index必须填一个，address优先
-     */
-    private String                address;
-
-    /**
-     * 指定注册中心寻址服务的地址, 和address必须填一个
-     */
-    private String                index            = "";
-
-    /**
-     * 是否注册，如果是false只订阅不注册
-     */
-    private boolean               register         = false;
-
-    /**
-     * 是否订阅服务
-     */
-    private boolean               subscribe        = false;
-
-    /**
-     * 调用注册中心超时时间
-     */
-    private int                   timeout          = 2000;
-
-    /**
-     * 连接注册中心超时时间
-     */
-    private int                   connectTimeout   = 2000;
-
-    /**
-     * 保存到本地文件的位置，默认$HOME下
-     */
-    private String                file;
-
-    /**
-     * 是否批量操作
-     */
-    private boolean               batch            = false;
-
-    /**
-     * 定时批量检查时的条目数
-     */
-    private int                   batchSize        = 10;
-
+    private static final long serialVersionUID = -2921019924557602234L;
     /**
      * Consumer给Provider发心跳的间隔
      */
-    protected int                 heartbeatPeriod  = 5;
-
+    protected int heartbeatPeriod = 5;
     /**
      * Consumer给Provider重连的间隔
      */
-    protected int                 reconnectPeriod  = 5;
-
+    protected int reconnectPeriod = 5;
     /**
      * The Parameters. 自定义参数
      */
     protected Map<String, String> parameters;
+    /**
+     * 协议
+     */
+    private String protocol = "";
+    /**
+     * 指定注册中心的地址, 和index必须填一个，address优先
+     */
+    private String address;
+    /**
+     * 指定注册中心寻址服务的地址, 和address必须填一个
+     */
+    private String index = "";
+    /**
+     * 是否注册，如果是false只订阅不注册
+     */
+    private boolean register = false;
+    /**
+     * 是否订阅服务
+     */
+    private boolean subscribe = false;
+    /**
+     * 调用注册中心超时时间
+     */
+    private int timeout = 2000;
+    /**
+     * 连接注册中心超时时间
+     */
+    private int connectTimeout = 2000;
+    /**
+     * 保存到本地文件的位置，默认$HOME下
+     */
+    private String file;
+    /**
+     * 是否批量操作
+     */
+    private boolean batch = false;
+    /**
+     * 定时批量检查时的条目数
+     */
+    private int batchSize = 10;
 
     /**
      * Gets protocol.
@@ -387,20 +374,20 @@ public class RegistryConfig extends AbstractIdConfig implements Serializable {
     @Override
     public String toString() {
         return "RegistryConfig{" +
-            "protocol='" + protocol + '\'' +
-            ", address='" + address + '\'' +
-            ", index='" + index + '\'' +
-            ", register=" + register +
-            ", subscribe=" + subscribe +
-            ", timeout=" + timeout +
-            ", connectTimeout=" + connectTimeout +
-            ", file='" + file + '\'' +
-            ", batch=" + batch +
-            ", batchSize=" + batchSize +
-            ", heartbeatPeriod=" + heartbeatPeriod +
-            ", reconnectPeriod=" + reconnectPeriod +
-            ", parameters=" + parameters +
-            '}';
+                "protocol='" + protocol + '\'' +
+                ", address='" + address + '\'' +
+                ", index='" + index + '\'' +
+                ", register=" + register +
+                ", subscribe=" + subscribe +
+                ", timeout=" + timeout +
+                ", connectTimeout=" + connectTimeout +
+                ", file='" + file + '\'' +
+                ", batch=" + batch +
+                ", batchSize=" + batchSize +
+                ", heartbeatPeriod=" + heartbeatPeriod +
+                ", reconnectPeriod=" + reconnectPeriod +
+                ", parameters=" + parameters +
+                '}';
     }
 
     @Override

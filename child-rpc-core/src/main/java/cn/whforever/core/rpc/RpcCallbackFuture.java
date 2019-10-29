@@ -14,7 +14,7 @@ import java.util.concurrent.TimeoutException;
 public class RpcCallbackFuture {
 
     /**
-     *  过期，失效
+     * 过期，失效
      */
     public static ConcurrentMap<String, RpcCallbackFuture> futurePool = new ConcurrentHashMap<String, RpcCallbackFuture>();
 
@@ -33,9 +33,11 @@ public class RpcCallbackFuture {
         this.request = request;
         futurePool.put(request.getRequestId(), this);
     }
+
     public RpcResponse getResponse() {
         return response;
     }
+
     public void setResponse(RpcResponse response) {
         this.response = response;
         // notify future lock

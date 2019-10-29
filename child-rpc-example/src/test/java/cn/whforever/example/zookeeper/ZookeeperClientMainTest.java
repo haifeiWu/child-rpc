@@ -5,7 +5,7 @@ import cn.whforever.core.config.RegistryConfig;
 import cn.whforever.core.protocol.netty.client.NettyClientAbstract;
 import cn.whforever.core.proxy.ClientProxy;
 import cn.whforever.core.rpc.RpcConstants;
-import cn.whforever.core.serialize.AbstractSerializer;
+import cn.whforever.core.serialize.Serializer;
 import cn.whforever.example.service.HelloService;
 
 /**
@@ -16,7 +16,7 @@ public class ZookeeperClientMainTest {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.setProtocol(RpcConstants.ZOOKEEPER)
                 .setTimeoutMillis(100000)
-                .setSerializer(AbstractSerializer.SerializeEnum.HESSIAN.serializer);
+                .setSerializer(Serializer.SerializeEnum.HESSIAN.serializer);
 
         RegistryConfig registryConfig = new RegistryConfig()
                 .setAddress("127.0.0.1:2181")
