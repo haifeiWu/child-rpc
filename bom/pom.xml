@@ -15,7 +15,7 @@
         <spring.version>4.3.18.RELEASE</spring.version>
         <!-- 3rd extends libs -->
         <servlet.version>2.5</servlet.version>
-        <resteasy.version>3.0.12.Final</resteasy.version>
+        <resteasy.version>4.5.7.Final</resteasy.version>
         <cxf.version>3.0.14</cxf.version>
         <jetty.version>7.5.4.v20111024</jetty.version>
         <curator.version>2.9.1</curator.version>
